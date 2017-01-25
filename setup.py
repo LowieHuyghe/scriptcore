@@ -70,17 +70,23 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages={
+        'scriptcore': 'src'
+    },
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'asciimatics==1.7.2',
+        'asciimatics == 1.7.2',
         'future==0.16.0',            # via asciimatics
         'olefile==0.44',             # via pillow
         'Pillow==4.0.0',             # via asciimatics
         'pyfiglet==0.7.5',           # via asciimatics
     ],
+
+    setup_requires=[
+        'setuptools_scm'
+    ]
 )
