@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from asciimatics.widgets import PopUpDialog as APopUpDialog
 
 

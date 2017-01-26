@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from asciimatics.widgets import Frame as AFrame
 from scriptcore.console.asciimatics.widgets.divider import Divider
 from scriptcore.console.asciimatics.widgets.label import Label
