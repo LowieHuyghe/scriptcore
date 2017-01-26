@@ -1,8 +1,8 @@
 
 from asciimatics.widgets import Frame as AFrame
-from core.Console.Asciimatics.Widgets.Divider import Divider
-from core.Console.Asciimatics.Widgets.Label import Label
-from core.Console.Asciimatics.Widgets.Layout import Layout
+from scriptcore.console.asciimatics.widgets.divider import Divider
+from scriptcore.console.asciimatics.widgets.label import Label
+from scriptcore.console.asciimatics.widgets.layout import Layout
 
 
 class Frame(AFrame):
