@@ -16,8 +16,8 @@ class Frame(AFrame):
         :param on_load:
         """
         super(Frame, self).__init__(screen,
-                                    screen.height * 2 // 3,
-                                    screen.width * 2 // 3,
+                                    screen.height / 5 * 4,
+                                    screen.width / 5 * 4,
                                     title=title,
                                     on_load=on_load)
 

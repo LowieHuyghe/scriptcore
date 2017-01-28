@@ -1,19 +1,25 @@
 
 from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod
+from scriptcore.console.basescript import BaseScript
 from asciimatics.screen import Screen
 from asciimatics.scene import Scene
 from asciimatics.exceptions import ResizeScreenError
 
 
-class GuiScript(object):
+class GuiScript(BaseScript):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, stop_on_resize=True, catch_interrupt=True):
+    def __init__(self, base_path, stop_on_resize=True, catch_interrupt=True):
         """
-        Construct the object
+        Construct the script
+        :param base_path:       The base path
+        :param stop_on_resize:  Stop on resize
+        :param catch_interrupt: Catch interrupt
         """
+        
+        super(GuiScript, self).__init__(base_path)
 
         self._screen = None
         self._scenes = []
