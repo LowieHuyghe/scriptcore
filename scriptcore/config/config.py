@@ -8,8 +8,21 @@ except ImportError:
 class Config(object):
 
     def __init__(self):
+        """
+        Construct the config instance
+        """
 
         self._config = {}
+
+    def __call__(self, key, default=None):
+        """
+        Call instance
+        :param key:     The key
+        :param default: The default value
+        :return:        The value
+        """
+
+        return self.get(key, default)
 
     def get(self, key, default=None):
         """
