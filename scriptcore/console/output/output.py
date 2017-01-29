@@ -40,6 +40,15 @@ class Output(object):
         elif type == 'subtitle':
             self.print_subtitle(text)
 
+        elif type == 'success':
+            self.print_success(text)
+
+        elif type == 'warning':
+            self.print_warning(text)
+
+        elif type == 'info':
+            self.print_info(text)
+
         elif type == 'error':
             self.print_error(text)
 
@@ -68,6 +77,24 @@ class Output(object):
 
         print '# %s' % text
 
+    def print_success(self, text):
+        """
+        Print success
+        :param text:    Text to print
+        :return:        void
+        """
+
+        print self.color(text, 'green')
+
+    def print_warning(self, text):
+        """
+        Print warning
+        :param text:    Text to print
+        :return:        void
+        """
+
+        print self.color(text, 'yellow')
+
     def print_error(self, text):
         """
         Print error
@@ -76,6 +103,15 @@ class Output(object):
         """
 
         print self.color(text, 'red')
+
+    def print_info(self, text):
+        """
+        Print info
+        :param text:    Text to print
+        :return:        void
+        """
+
+        print self.color(text, 'blue')
 
     def print_default(self, text):
         """
