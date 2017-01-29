@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod
-from scriptcore.console.basescript import BaseScript
+from scriptcore.basescript import BaseScript
 from scriptcore.console.output.output import Output
 from scriptcore.console.input.input import Input
 from scriptcore.console.command import Command

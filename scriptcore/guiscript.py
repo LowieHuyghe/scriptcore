@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod
-from scriptcore.console.basescript import BaseScript
+from scriptcore.basescript import BaseScript
 from asciimatics.screen import Screen
 from asciimatics.scene import Scene
 from asciimatics.exceptions import ResizeScreenError
