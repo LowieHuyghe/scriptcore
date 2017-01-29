@@ -86,6 +86,8 @@ class CuiScript(BaseScript):
 
             elif last_option:
                 last_option.add_value(argument)
+                if not last_option.type == 'list':
+                    last_option = None
 
             else:
                 raise RuntimeError('Unknown command "%s" given' % argument)
@@ -151,17 +153,18 @@ class CuiScript(BaseScript):
 
         self._commands[command] = Command(command, description, callback)
 
-    def _register_option(self, short, description, default=None, long=None):
+    def _register_option(self, short, description, default=None, long=None, type=None):
         """
         Register an option
         :param short:       Option in short
         :param description: Description
         :param default:     The default value
         :param long:        Option in long
+        :param type:        Type of option
         :return:            void
         """
 
-        self._options[short] = Option(short, description, default=default, long=long)
+        self._options[short] = Option(short, description, default=default, long=long, type=type)
 
     def help(self):
         """
@@ -198,7 +201,8 @@ class CuiScript(BaseScript):
             for option in self._options.values():
                 print_option = '%s%s' % (option.short, ' ' * (first_column_min_length - len(option.short)))
                 print_option_default = ' (default: %s)' % option.default if option.default is not None else ''
-                self.output('    -%s   %s%s' % (print_option, option.description, print_option_default))
+                print_option_type = '(%s) ' % option.type if option.type is not None else ''
+                self.output('    -%s   %s%s%s' % (print_option, print_option_type, option.description, print_option_default))
                 if option.long is not None:
                     self.output('    --%s' % option.long)
 
