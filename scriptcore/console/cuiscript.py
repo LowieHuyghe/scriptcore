@@ -115,21 +115,30 @@ class CuiScript(BaseScript):
 
         try:
             self._analyze_arguments()
+            self._run()
 
-            for command in self._commands.values():
-                if command.given:
-                    if type(command.callback) == types.FunctionType:
-                        command.callback(arguments=command.arguments)
-                    else:
-                        subcommand = command.callback(self._base_path, arguments=command.arguments)
-                        subcommand.run()
-                    return
-
-            self.help()
+        except KeyboardInterrupt:
+            sys.exit(1)
 
         except Exception as e:
-            self.output(e, 'error')
+            self.output('Error: %s' % e, 'error')
             self.output('')
+
+    def _run(self):
+        """
+        Actually run the script
+        """
+
+        for command in self._commands.values():
+            if command.given:
+                if type(command.callback) == types.FunctionType:
+                    command.callback(arguments=command.arguments)
+                else:
+                    subcommand = command.callback(self._base_path, arguments=command.arguments)
+                    subcommand.run()
+                return
+
+        self.help()
 
     def _register_command(self, command, description, callback):
         """
