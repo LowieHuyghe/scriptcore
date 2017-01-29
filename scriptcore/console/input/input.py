@@ -11,6 +11,27 @@ class Input(object):
 
         self._output = Output()
 
+    def __call__(self, description):
+        """
+        Call the instance
+        :param description: Description
+        :return:            Value
+        """
+
+        return self.text(description)
+
+    def text(self, description):
+        """
+        Raw input
+        :param description: Description
+        :return:            Value
+        """
+
+        if description:
+            print description
+
+        return raw_input(self._output.color('> ', 'yellow'))
+
     def pick(self, options, description):
         """
         Pick an option
