@@ -17,7 +17,7 @@ class Execute(object):
         """
         Execute
         :param command: The command
-        :return:
+        :return:        Out, err, exitcode
         """
 
         process = subprocess.Popen(command,
@@ -28,4 +28,8 @@ class Execute(object):
 
         out, err = process.communicate()
 
-        return out.strip().split('\n')
+        out = out.strip().split('\n')
+        err = err.strip().split('\n')
+        exitcode = process.returncode
+
+        return out, err, exitcode
