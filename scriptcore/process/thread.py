@@ -11,19 +11,25 @@ class Thread(BaseThread):
 
         super(Thread, self).__init__(*args, **kwargs)
 
+        self._out = None
+        self._err = None
         self.returncode = 0
-        self._return = None
 
     def run(self):
         """
         Run
         """
 
-        self._return = None
+        self._out = None
+        self._err = None
+        self.returncode = 0
 
         try:
             if self.__target:
-                self._return = self.__target(*self.__args, **self.__kwargs)
+                self._out = self.__target(*self.__args, **self.__kwargs)
+        except Exception as e:
+            self._err = e
+            self.returncode = 1
         finally:
             # Avoid a refcycle if the thread is running a function with
             # an argument that has a member that points to the thread.
@@ -45,4 +51,4 @@ class Thread(BaseThread):
 
         self.join()
 
-        return self._return, None, self.returncode
+        return self._out, self._err, self.returncode
