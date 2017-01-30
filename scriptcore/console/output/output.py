@@ -1,3 +1,7 @@
+# -*- coding: UTF-8 -*-
+
+import sys
+
 
 class Output(object):
 
@@ -25,102 +29,139 @@ class Output(object):
             'gray_light': '\033[0;37m',
             'white': '\033[1;37m',
         }
+        self._emoticons = {
+            'check': '✅ ',
+            'cross': '❌ ',
+            'bell': '🔔 '
+        }
 
-    def __call__(self, text, type=None):
+        self._last_no_newline_length = 0
+
+    def __call__(self, text, type=None, newline=True):
         """
         Call the output
         :param text:    The text to print
         :param type:    The type of text
+        :param newline: Newline at the end
         :return:        void
         """
 
         if type == 'title':
-            self.print_title(text)
+            self.title(text, newline=newline)
 
         elif type == 'subtitle':
-            self.print_subtitle(text)
+            self.subtitle(text, newline=newline)
 
         elif type == 'success':
-            self.print_success(text)
+            self.success(text, newline=newline)
 
         elif type == 'warning':
-            self.print_warning(text)
+            self.warning(text, newline=newline)
 
         elif type == 'info':
-            self.print_info(text)
+            self.info(text, newline=newline)
 
         elif type == 'error':
-            self.print_error(text)
+            self.error(text, newline=newline)
 
         else:
-            self.print_default(text)
+            self.default(text, newline=newline)
 
-    def print_title(self, text):
+    def title(self, text, newline=True):
         """
         Print title
         :param text:    Text to print
+        :param newline: Newline at the end
         :return:        void
         """
 
         print_text = '#  %s  #' % text
 
-        print self.color('#' * len(print_text), 'blue')
-        print self.color(print_text, 'blue')
-        print self.color('#' * len(print_text), 'blue')
+        self.default('%s\n%s\n%s' % (
+            self.color('#' * len(print_text), 'blue'),
+            self.color(print_text, 'blue'),
+            self.color('#' * len(print_text), 'blue')
+        ), newline=newline)
 
-    def print_subtitle(self, text):
+    def subtitle(self, text, newline=True):
         """
         Print subtitle
         :param text:    Text to print
+        :param newline: Newline at the end
         :return:        void
         """
 
-        print '# %s' % text
+        self.default('# %s' % text, newline=newline)
 
-    def print_success(self, text):
+    def success(self, text, newline=True):
         """
         Print success
         :param text:    Text to print
+        :param newline: Newline at the end
         :return:        void
         """
 
-        print self.color(text, 'green')
+        self.default('%s %s' % (self._emoticons['check'], self.color(text, 'green')), newline=newline)
 
-    def print_warning(self, text):
+    def warning(self, text, newline=True):
         """
         Print warning
         :param text:    Text to print
+        :param newline: Newline at the end
         :return:        void
         """
 
-        print self.color(text, 'yellow')
+        self.default('%s %s' % (self._emoticons['bell'], self.color(text, 'yellow')), newline=newline)
 
-    def print_error(self, text):
+    def error(self, text, newline=True):
         """
         Print error
         :param text:    Text to print
+        :param newline: Newline at the end
         :return:        void
         """
 
-        print self.color(text, 'red')
+        self.default('%s %s' % (self._emoticons['cross'], self.color(text, 'red')), newline=newline)
 
-    def print_info(self, text):
+    def info(self, text, newline=True):
         """
         Print info
         :param text:    Text to print
+        :param newline: Newline at the end
         :return:        void
         """
 
-        print self.color(text, 'blue')
+        self.default(self.color(text, 'blue'), newline=newline)
 
-    def print_default(self, text):
+    def default(self, text, newline=True):
         """
         Print default text
         :param text:    Text to print
+        :param newline: Newline at the end
         :return:        void
         """
 
-        print text
+        # Calculate the text length
+        text_length = text
+        for color in self._colors.values():
+            text_length = text_length.replace(color, '')
+        for emoticon in self._emoticons.values():
+            text_length = text_length.replace(emoticon, ' ')
+        text_length = len(text_length)
+
+        # Make the text to print
+        spaces = ' ' * max(self._last_no_newline_length - text_length, 0)
+        text = '\r%s%s' % (text, spaces)
+
+        if newline:
+            print text
+
+            self._last_no_newline_length = 0
+        else:
+            sys.stdout.write(text)
+            sys.stdout.flush()
+
+            self._last_no_newline_length = text_length
 
     def color(self, text, color):
         """

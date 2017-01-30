@@ -33,7 +33,7 @@ class CuiScript(BaseScript):
 
         self.output = Output()
         self.input = Input()
-        self.execute = Execute()
+        self.execute = Execute(self.output)
         self._commands = {}
         self._options = {}
 
