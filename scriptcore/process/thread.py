@@ -11,6 +11,7 @@ class Thread(BaseThread):
 
         super(Thread, self).__init__(*args, **kwargs)
 
+        self.returncode = 0
         self._return = None
 
     def run(self):
@@ -28,12 +29,20 @@ class Thread(BaseThread):
             # an argument that has a member that points to the thread.
             del self.__target, self.__args, self.__kwargs
 
-    def join(self):
+    def is_running(self):
         """
-        Join
-        :return:    The return value
+        Running
+        :return:    Boolean
         """
 
-        super(Thread, self).join()
+        return True if self.isAlive() else False
 
-        return self._return
+    def communicate(self):
+        """
+        Communicate
+        :return:    Out, err, exitcode
+        """
+
+        self.join()
+
+        return self._return, None, self.returncode
