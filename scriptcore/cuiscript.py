@@ -190,7 +190,8 @@ class CuiScript(BaseScript):
             self.output('Commands')
 
             for command in self._commands.values():
-                print_command = '%s%s' % (command.command, ' ' * (first_column_min_length - len(command.command)))
+                print_command = self.output.color(command.command, 'green')
+                print_command = '%s%s' % (print_command, ' ' * (first_column_min_length - len(command.command)))
                 self.output('    %s    %s' % (print_command, command.description))
 
         # Print options
@@ -199,11 +200,17 @@ class CuiScript(BaseScript):
             self.output('Options')
 
             for option in self._options.values():
-                print_option = '%s%s' % (option.short, ' ' * (first_column_min_length - len(option.short)))
+                print_option = self.output.color(option.short, 'green')
+                print_option = '%s%s' % (print_option, ' ' * (first_column_min_length - len(option.short)))
                 print_option_default = ' (default: %s)' % option.default if option.default is not None else ''
                 print_option_type = '(%s) ' % option.type if option.type is not None else ''
                 self.output('    -%s   %s%s%s' % (print_option, print_option_type, option.description, print_option_default))
                 if option.long is not None:
                     self.output('    --%s' % option.long)
+
+        # No commands or options
+        if not len(self._commands) and not len(self._options):
+            self.output('')
+            self.output('No commands or options registered')
 
         self.output('')
