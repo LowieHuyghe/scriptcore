@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 
 import sys
 
@@ -30,9 +29,10 @@ class Output(object):
             'white': '\033[1;37m',
         }
         self._emoticons = {
-            'check': '✅ ',
-            'cross': '❌ ',
-            'bell': '🔔 '
+            'check': '\xE2\x9C\x85 ',
+            'cross': '\xE2\x9D\x8C ',
+            'bell': '\xF0\x9F\x94\x94 ',
+            'info': '\xF0\x9F\x92\xAC '
         }
 
         self._last_no_newline_length = 0
@@ -131,7 +131,7 @@ class Output(object):
         :return:        void
         """
 
-        self.default(self.color(text, 'blue'), newline=newline)
+        self.default('%s %s' % (self._emoticons['info'], text), newline=newline)
 
     def default(self, text, newline=True):
         """

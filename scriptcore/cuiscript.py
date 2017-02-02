@@ -9,6 +9,7 @@ from scriptcore.process.execute import Execute
 from scriptcore.console.option import Option
 import sys
 import types
+import traceback
 
 
 class CuiScript(BaseScript):
@@ -123,7 +124,11 @@ class CuiScript(BaseScript):
             sys.exit(1)
 
         except Exception as e:
-            self.output('Error: %s' % e, 'error')
+            ex_type, ex, tb = sys.exc_info()
+            e_tb = '\n'.join(traceback.format_tb(tb))
+            del tb
+
+            self.output.error('Error: %s\n%s' % (e, e_tb))
             self.output('')
 
     def _run(self):
@@ -133,7 +138,7 @@ class CuiScript(BaseScript):
 
         for command in self._commands.values():
             if command.given:
-                if type(command.callback) == types.FunctionType:
+                if isinstance(command.callback, types.FunctionType):
                     command.callback(arguments=command.arguments)
                 else:
                     subcommand = command.callback(self._base_path, arguments=command.arguments)
@@ -174,6 +179,7 @@ class CuiScript(BaseScript):
 
         title = '%s ~ %s' % (self._title, self._description)
         self.output(title, type='title')
+        self.output('')
 
         # Minimum length
         first_column_min_length = 0
@@ -186,7 +192,6 @@ class CuiScript(BaseScript):
 
         # Print commands
         if len(self._commands):
-            self.output('')
             self.output('Commands')
 
             for command in self._commands.values():
@@ -194,23 +199,24 @@ class CuiScript(BaseScript):
                 print_command = '%s%s' % (print_command, ' ' * (first_column_min_length - len(command.command)))
                 self.output('    %s    %s' % (print_command, command.description))
 
+            self.output('')
+
         # Print options
         if len(self._options):
-            self.output('')
             self.output('Options')
 
             for option in self._options.values():
-                print_option = self.output.color(option.short, 'green')
+                print_option = self.output.color('-%s' % option.short, 'green')
                 print_option = '%s%s' % (print_option, ' ' * (first_column_min_length - len(option.short)))
                 print_option_default = ' (default: %s)' % option.default if option.default is not None else ''
                 print_option_type = '(%s) ' % option.type if option.type is not None else ''
-                self.output('    -%s   %s%s%s' % (print_option, print_option_type, option.description, print_option_default))
+                self.output('    %s   %s%s%s' % (print_option, print_option_type, option.description, print_option_default))
                 if option.long is not None:
                     self.output('    --%s' % option.long)
 
+            self.output('')
+
         # No commands or options
         if not len(self._commands) and not len(self._options):
-            self.output('')
             self.output('No commands or options registered')
-
-        self.output('')
+            self.output('')

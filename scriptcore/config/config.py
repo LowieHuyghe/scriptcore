@@ -3,6 +3,8 @@ try:
     import ConfigParser
 except ImportError:
     import configparser as ConfigParser
+import json
+from scriptcore.encoding.encoding import Encoding
 
 
 class Config(object):
@@ -43,20 +45,29 @@ class Config(object):
 
         return value
 
-    def load_from_ini(self, filename):
+    def load_from_ini(self, filename, namespace=None):
         """
         Load config from ini-file
         :param filename:    The file name
+        :param namespace:   A optional namespace
         :return:
         """
 
         config = ConfigParser.ConfigParser()
         config.read(filename)
 
+        if namespace is not None:
+            if namespace.lower() not in self._config:
+                self._config[namespace.lower()] = {}
+
         for section in config.sections():
             for option in config.options(section):
-                if section.lower() not in self._config:
-                    self._config[section.lower()] = {}
+                if namespace is None:
+                    if section.lower() not in self._config:
+                        self._config[section.lower()] = {}
+                else:
+                    if section.lower() not in self._config[namespace.lower()]:
+                        self._config[namespace.lower()][section.lower()] = {}
 
                 try:
                     value = config.getint(section, option)
@@ -69,4 +80,28 @@ class Config(object):
                         except ValueError:
                             value = config.get(section, option)
 
-                self._config[section.lower()][option.lower()] = value
+                if namespace is None:
+                    self._config[section.lower()][option.lower()] = value
+                else:
+                    self._config[namespace.lower()][section.lower()][option.lower()] = value
+
+    def load_from_json(self, filename, namespace=None):
+        """
+        Load config from json-file
+        :param filename:    The file name
+        :param namespace:   A optional namespace
+        :return:
+        """
+
+        with open(filename) as json_file:
+            json_content = Encoding.to_ascii(json.load(json_file))
+
+        if namespace is not None:
+            if namespace.lower() not in self._config:
+                self._config[namespace.lower()] = {}
+
+        for key in json_content:
+            if namespace is None:
+                self._config[key] = json_content[key]
+            else:
+                self._config[namespace.lower()][key] = json_content[key]

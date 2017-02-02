@@ -64,3 +64,14 @@ class Input(object):
             return int(result)
         except ValueError:
             return None
+
+    def yes_no(self, description):
+        """
+        Yes no input
+        :param description: Description
+        :return:            Integer
+        """
+
+        result = raw_input('%s %s ' % (description, self._output.color('(y/n)', 'yellow')))
+
+        return result == 'y'

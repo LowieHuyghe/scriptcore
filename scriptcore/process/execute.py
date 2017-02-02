@@ -81,7 +81,7 @@ class Execute(object):
         while process.is_running():
             spinner = ['-', '\\', '|', '/'][spinner_index % 4]
 
-            self._output.info('%s: %s' % (description, spinner), newline=False)
+            self._output('%s: %s' % (description, spinner), newline=False)
 
             spinner_index += 1
             time.sleep(0.1)
