@@ -258,7 +258,7 @@ class TestCase(unittest.TestCase):
 
             for i in range(0, len(expected)):
                 self.assert_equal_deep(list(expected.keys())[i], list(value.keys())[i], check_type=check_type)
-                self.assert_equal_deep(expected.values()[i], value.values()[i], check_type=check_type)
+                self.assert_equal_deep(list(expected.values())[i], list(value.values())[i], check_type=check_type)
 
         elif isinstance(expected, list):
             self.assert_is_instance(value, list)
