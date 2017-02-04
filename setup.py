@@ -91,5 +91,8 @@ setup(
 
     setup_requires=[
         'setuptools_scm'
-    ]
+    ],
+
+    test_suite='nose.collector',
+    tests_require=['nose']
 )
