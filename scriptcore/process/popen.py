@@ -4,15 +4,14 @@ from subprocess import Popen as BasePopen
 
 class Popen(BasePopen):
 
-    def communicate(self, input=None, timeout=None):
+    def communicate(self, input=None):
         """
         Communicate
         :param input:   Optional input
-        :param timeout: Optional timeout
         :return:        Out, err, exitcode
         """
 
-        out, err = super(Popen, self).communicate(input=input, timeout=timeout)
+        out, err = super(Popen, self).communicate(input=input)
 
         out = out.strip().split('\n')
         err = err.strip().split('\n')
