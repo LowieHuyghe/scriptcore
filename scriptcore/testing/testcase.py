@@ -2,6 +2,7 @@
 import os
 import tempfile
 import unittest
+import shutil
 
 
 class TestCase(unittest.TestCase):
@@ -12,6 +13,7 @@ class TestCase(unittest.TestCase):
         """
 
         self._temp_files = []
+        self._temp_dirs = []
 
     def tear_down(self):
         """
@@ -19,31 +21,68 @@ class TestCase(unittest.TestCase):
         """
 
         for temp_file in self._temp_files:
-            os.remove(temp_file)
+            if os.path.isfile(temp_file):
+                os.remove(temp_file)
+        for temp_dir in self._temp_dirs:
+            if os.path.isdir(temp_dir):
+                shutil.rmtree(temp_dir)
 
-    def temp_file(self):
+    def temp_file(self, only_path=False, suffix='', prefix='tmp'):
         """
         Get temp file
-        :return:    Path to temp file
+        :param only_path:   Only return the path
+        :param suffix:      File suffix
+        :param prefix:      File prefix
+        :return:            Path to temp file
         """
 
-        path = tempfile.mktemp()
+        path = tempfile.mktemp(suffix=suffix, prefix=prefix)
+        if only_path and os.path.isfile(path):
+            os.remove(path)
         self._temp_files.append(path)
         return path
 
-    def write_temp_file(self, content):
+    def write_temp_file(self, content, suffix='', prefix='tmp'):
         """
         Write to temp file
         :param content: The content to write to file
+        :param suffix:  File suffix
+        :param prefix:  File prefix
         :return:        The file path
         """
 
-        path = self.temp_file()
+        path = self.temp_file(suffix=suffix, prefix=prefix)
 
         with open(path, 'w') as file:
             file.write(content)
 
         return path
+
+    def temp_dir(self, only_path=False, suffix='', prefix='tmp'):
+        """
+        Get temp dir
+        :param only_path:   Only return the path
+        :param suffix:      File suffix
+        :param prefix:      File prefix
+        :return:            Path to temp dir
+        """
+
+        path = tempfile.mkdtemp(suffix=suffix, prefix=prefix)
+        if only_path and os.path.isdir(path):
+            shutil.rmtree(path)
+        self._temp_dirs.append(path)
+        return path
+
+    def tests_dir(self):
+        """
+        Get the tests directory
+        :return:    Directory
+        """
+
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        tests_dir = os.path.join(current_dir, '../../tests')
+        tests_dir = os.path.abspath(tests_dir)
+        return tests_dir
 
     def setUp(self):
         """
