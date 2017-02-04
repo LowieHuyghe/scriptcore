@@ -30,7 +30,7 @@ class Input(object):
         if description:
             print(description)
 
-        return raw_input(self._output.color('> ', 'yellow'))
+        return self._input(self._output.color('> ', 'yellow'))
 
     def pick(self, options, description):
         """
@@ -58,7 +58,7 @@ class Input(object):
         if description:
             print(description)
 
-        result = raw_input(self._output.color('> ', 'yellow'))
+        result = self._input(self._output.color('> ', 'yellow'))
 
         try:
             return int(result)
@@ -72,6 +72,18 @@ class Input(object):
         :return:            Integer
         """
 
-        result = raw_input('%s %s ' % (description, self._output.color('(y/n)', 'yellow')))
+        result = self._input('%s %s ' % (description, self._output.color('(y/n)', 'yellow')))
 
         return result == 'y'
+
+    def _input(self, description):
+        """
+        Input from user
+        :param description: The description
+        :return:            The user input
+        """
+
+        try:
+            return raw_input(description)
+        except NameError:
+            return input(description)
