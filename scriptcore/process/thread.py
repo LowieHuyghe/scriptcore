@@ -25,15 +25,28 @@ class Thread(BaseThread):
         self.returncode = 0
 
         try:
-            if self.__target:
-                self._out = self.__target(*self.__args, **self.__kwargs)
-        except Exception as e:
-            self._err = e
-            self.returncode = 1
-        finally:
-            # Avoid a refcycle if the thread is running a function with
-            # an argument that has a member that points to the thread.
-            del self.__target, self.__args, self.__kwargs
+            self.__target
+            try:
+                if self.__target:
+                    self._out = self.__target(*self.__args, **self.__kwargs)
+            except Exception as e:
+                self._err = e
+                self.returncode = 1
+            finally:
+                # Avoid a refcycle if the thread is running a function with
+                # an argument that has a member that points to the thread.
+                del self.__target, self.__args, self.__kwargs
+        except AttributeError:
+            try:
+                if self._target:
+                    self._out = self._target(*self._args, **self._kwargs)
+            except Exception as e:
+                self._err = e
+                self.returncode = 1
+            finally:
+                # Avoid a refcycle if the thread is running a function with
+                # an argument that has a member that points to the thread.
+                del self._target, self._args, self._kwargs
 
     def is_running(self):
         """
@@ -41,7 +54,7 @@ class Thread(BaseThread):
         :return:    Boolean
         """
 
-        return True if self.isAlive() else False
+        return self.isAlive()
 
     def communicate(self):
         """

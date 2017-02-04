@@ -59,13 +59,13 @@ class TestExecute(TestCase):
         self.assert_equal_deep(exp_out, out)
         self.assert_equal_deep(exp_err, err)
         self.assert_equal_deep(exp_exitcode, exitcode)
-        self.assert_equal(exp_err.message, err.message)
+        self.assert_equal(str(exp_err), str(err))
 
         out, err, exitcode = execute(target)
         self.assert_equal_deep(exp_out, out)
         self.assert_equal_deep(exp_err, err)
         self.assert_equal_deep(exp_exitcode, exitcode)
-        self.assert_equal(exp_err.message, err.message)
+        self.assert_equal(str(exp_err), str(err))
 
     def test_execute_target_args(self):
         """
@@ -82,7 +82,7 @@ class TestExecute(TestCase):
         self.assert_equal_deep(exp_err, err)
         self.assert_equal_deep(exp_exitcode, exitcode)
 
-        out, err, exitcode = execute(target, arguments=args)
+        out, err, exitcode = execute.execute(target, arguments=args)
         self.assert_equal_deep(exp_out, out)
         self.assert_equal_deep(exp_err, err)
         self.assert_equal_deep(exp_exitcode, exitcode)
@@ -190,11 +190,11 @@ class TestExecute(TestCase):
             1,
             True,
         )
-        out = sorted(args)
+        out = args
         err = None
         exitcode = 0
 
         def my_target(arg1, arg2, arg3):
-            return sorted((arg1, arg2, arg3))
+            return (arg1, arg2, arg3)
 
         return my_target, args, out, err, exitcode

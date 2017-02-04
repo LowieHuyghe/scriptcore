@@ -1,7 +1,6 @@
 
 from scriptcore.testing.testcase import TestCase
 from scriptcore.process.thread import Thread
-import subprocess
 
 
 class TestThread(TestCase):

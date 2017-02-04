@@ -1,5 +1,6 @@
 
 from subprocess import Popen as BasePopen
+from scriptcore.encoding.encoding import Encoding
 
 
 class Popen(BasePopen):
@@ -13,8 +14,8 @@ class Popen(BasePopen):
 
         out, err = super(Popen, self).communicate(input=input)
 
-        out = out.strip().split('\n')
-        err = err.strip().split('\n')
+        out = Encoding.normalize(out).strip().split('\n')
+        err = Encoding.normalize(err).strip().split('\n')
 
         return out, err, self.returncode
 
