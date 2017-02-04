@@ -41,7 +41,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/LowieHuyghe/scriptcore',
+    url='https://github.com/LowieHuyghe/script-core',
 
     # Author details
     author='Lowie Huyghe',
