@@ -243,3 +243,30 @@ class TestCase(unittest.TestCase):
         Skip this test
         """
         return self.skipTest(reason)
+
+    def assert_equal_deep(self, expected, value, check_type=True):
+        """
+        Assert equal deep
+        :param expected:    The expected value
+        :param value:       The value
+        :param check_type:  Do type check
+        :return:
+        """
+
+        if isinstance(expected, dict):
+            self.assert_is_instance(value, dict)
+
+            for i in range(0, len(expected)):
+                self.assert_equal_deep(expected.keys()[i], value.keys()[i], check_type=check_type)
+                self.assert_equal_deep(expected.values()[i], value.values()[i], check_type=check_type)
+
+        elif isinstance(expected, list):
+            self.assert_is_instance(value, list)
+
+            for i in range(0, len(expected)):
+                self.assert_equal_deep(expected[i], value[i], check_type=check_type)
+
+        else:
+            self.assert_equal(expected, value)
+            if check_type:
+                self.assert_is_instance(value, type(expected))
