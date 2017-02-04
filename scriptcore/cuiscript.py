@@ -84,7 +84,7 @@ class CuiScript(BaseScript):
 
             elif last_option:
                 last_option.add_value(argument)
-                if not last_option.type == 'list':
+                if not last_option.type == Option.type_list:
                     last_option = None
 
             else:

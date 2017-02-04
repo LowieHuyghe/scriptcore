@@ -1,6 +1,8 @@
 
 class Option(object):
 
+    type_list = 'list'
+
     def __init__(self, short, description, default=None, long=None, type=None):
         """
         Construct option
@@ -17,7 +19,7 @@ class Option(object):
         self.long = long
         self.given = False
         self.type = type
-        if self.type == 'list':
+        if self.type == Option.type_list:
             self._value = []
         else:
             self._value = None
@@ -26,6 +28,8 @@ class Option(object):
     def value(self):
         if self.given:
             return self._value
+        if self.type == Option.type_list and self.default is None:
+            return []
         return self.default
 
     @value.setter
@@ -34,7 +38,7 @@ class Option(object):
         self.given = True
 
     def add_value(self, value):
-        if self.type == 'list':
+        if self.type == Option.type_list:
             self._value.append(value)
         else:
             self._value = value
@@ -48,7 +52,7 @@ class Option(object):
         """
 
         self.given = False
-        if self.type == 'list':
+        if self.type == Option.type_list:
             self._value = []
         else:
             self._value = None
