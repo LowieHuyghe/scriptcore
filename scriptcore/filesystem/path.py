@@ -1,6 +1,6 @@
 
 import os
-from math import log10
+import math
 
 
 class Path(object):
@@ -31,16 +31,13 @@ class Path(object):
         """
 
         if size == 0:
-            return '0'
+            return '0 B'
 
-        magnitude = int(log10(abs(size)))
-        if magnitude > 13:
-            format_str = '%i T'
-            denominator_mag = 12
-        else:
-            float_fmt = '%2.1f ' if magnitude % 3 == 1 else '%1.2f '
-            illion = (magnitude + 1) // 3
-            format_str = float_fmt + ['B', 'K', 'M', 'G', 'T'][illion]
-            denominator_mag = illion * 3
+        size_name = ('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB')
 
-        return (format_str % (size * 1.0 / (10 ** denominator_mag))).lstrip('0')
+        i = int(math.floor(math.log(size, 1024)))
+        p = math.pow(1024, i)
+        s = round(size/p, 2)
+
+        return '%s %s' % (s, size_name[i])
+
