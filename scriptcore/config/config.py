@@ -94,7 +94,7 @@ class Config(object):
         """
 
         with open(filename) as json_file:
-            json_content = Encoding.to_ascii(json.load(json_file))
+            json_content = Encoding.normalize(json.load(json_file))
 
         if namespace is not None:
             if namespace.lower() not in self._config:
