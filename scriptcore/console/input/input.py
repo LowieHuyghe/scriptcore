@@ -28,7 +28,7 @@ class Input(object):
         """
 
         if description:
-            print description
+            print(description)
 
         return raw_input(self._output.color('> ', 'yellow'))
 
@@ -41,10 +41,10 @@ class Input(object):
         """
 
         if description:
-            print description
+            print(description)
 
         for i in range(0, len(options)):
-            print '[%i] %s' % (i, options[i])
+            print('[%i] %s' % (i, options[i]))
 
         return self.integer(None)
 
@@ -56,7 +56,7 @@ class Input(object):
         """
 
         if description:
-            print description
+            print(description)
 
         result = raw_input(self._output.color('> ', 'yellow'))
 

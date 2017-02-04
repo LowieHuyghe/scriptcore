@@ -1,6 +1,6 @@
 
 from __future__ import absolute_import
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from scriptcore.basescript import BaseScript
 from scriptcore.console.output.output import Output
 from scriptcore.console.input.input import Input
@@ -45,10 +45,7 @@ class CuiScript(BaseScript):
         """
 
         # Reset
-        for option in self._options.values():
-            option.reset()
-        for command in self._commands.values():
-            command.reset()
+        self._reset_arguments()
 
         # Loop arguments
         last_option = None
@@ -92,6 +89,17 @@ class CuiScript(BaseScript):
 
             else:
                 raise RuntimeError('Unknown command "%s" given' % argument)
+
+    def _reset_arguments(self):
+        """
+        Reset the arguments
+        :return:    void
+        """
+
+        for option in self._options.values():
+            option.reset()
+        for command in self._commands.values():
+            command.reset()
 
     def _has_option(self, short):
         """

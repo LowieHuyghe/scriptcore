@@ -154,7 +154,7 @@ class Output(object):
         text = '\r%s%s' % (text, spaces)
 
         if newline:
-            print text
+            print(text)
 
             self._last_no_newline_length = 0
         else:
