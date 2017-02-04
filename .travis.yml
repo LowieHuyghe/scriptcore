@@ -7,6 +7,9 @@ python:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+  - pip install coveralls
 # command to run tests
 script:
-  python setup.py test
+  coverage run --source=scriptcore setup.py test
+after_success:
+  coveralls
