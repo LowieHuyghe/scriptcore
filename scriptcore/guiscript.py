@@ -11,15 +11,18 @@ class GuiScript(BaseScript):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, base_path, stop_on_resize=True, catch_interrupt=True):
+    def __init__(self, base_path, title, description, arguments=None, stop_on_resize=True, catch_interrupt=True):
         """
         Construct the script
         :param base_path:       The base path
+        :param title:           The title
+        :param description:     The description
+        :param arguments:       The arguments
         :param stop_on_resize:  Stop on resize
         :param catch_interrupt: Catch interrupt
         """
         
-        super(GuiScript, self).__init__(base_path)
+        super(GuiScript, self).__init__(base_path, title, description, arguments)
 
         self._screen = None
         self._scenes = []
@@ -40,7 +43,7 @@ class GuiScript(BaseScript):
         self._init()
         self._screen.play(self._scenes, stop_on_resize=self._stop_on_resize, start_scene=self._last_scene)
 
-    def run(self):
+    def _run(self):
         """
         Run the script
         """
