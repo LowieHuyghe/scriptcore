@@ -1,8 +1,16 @@
 
+from scriptcore.encoding.encoding import Encoding
 import os
 import tempfile
 import unittest
 import shutil
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
+import sys
+import random
+import string
 
 
 class TestCase(unittest.TestCase):
@@ -15,6 +23,13 @@ class TestCase(unittest.TestCase):
         self._temp_files = []
         self._temp_dirs = []
 
+        self.stdout_original = sys.stdout
+        sys.stdout = self.stdout = StringIO()
+        self.stderr_original = sys.stderr
+        sys.stderr = self.stderr = StringIO()
+        self.stdin_original = sys.stdin
+        sys.stdin = self.stdin = StringIO()
+
     def tear_down(self):
         """
         Tear down the test case
@@ -26,6 +41,10 @@ class TestCase(unittest.TestCase):
         for temp_dir in self._temp_dirs:
             if os.path.isdir(temp_dir):
                 shutil.rmtree(temp_dir)
+
+        sys.stdout = self.stdout_original
+        sys.stderr = self.stderr_original
+        sys.stdin = self.stdin_original
 
     def temp_file(self, only_path=False, suffix='', prefix='tmp'):
         """
@@ -83,6 +102,15 @@ class TestCase(unittest.TestCase):
         tests_dir = os.path.join(current_dir, '../../tests')
         tests_dir = os.path.abspath(tests_dir)
         return tests_dir
+
+    def rand_str(self, length = 20):
+        """
+        Get random string of certain length
+        :param length:  The length of the string
+        :return:        Random string
+        """
+
+        return Encoding.normalize(''.join(random.choice(string.ascii_lowercase) for i in range(length)))
 
     def setUp(self):
         """
