@@ -53,7 +53,7 @@ class Input(object):
 
         result = self.integer(None)
 
-        if result < len(options):
+        if result is not None and result < len(options):
             return result
         return None
 
