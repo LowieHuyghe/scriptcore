@@ -1,5 +1,6 @@
 
 from scriptcore.console.output.output import Output
+import sys
 
 
 class Input(object):
@@ -30,7 +31,11 @@ class Input(object):
         if description:
             print(description)
 
-        return self._input(self._output.color('> ', 'yellow'))
+        result = self._input(self._output.color('> ', 'yellow'))
+
+        if result:
+            return result
+        return None
 
     def pick(self, options, description):
         """
@@ -46,7 +51,11 @@ class Input(object):
         for i in range(0, len(options)):
             print('[%i] %s' % (i, options[i]))
 
-        return self.integer(None)
+        result = self.integer(None)
+
+        if result < len(options):
+            return result
+        return None
 
     def integer(self, description):
         """
@@ -65,6 +74,23 @@ class Input(object):
         except ValueError:
             return None
 
+    def float(self, description):
+        """
+        Float input
+        :param description: Description
+        :return:            Integer
+        """
+
+        if description:
+            print(description)
+
+        result = self._input(self._output.color('> ', 'yellow'))
+
+        try:
+            return float(result)
+        except ValueError:
+            return None
+
     def yes_no(self, description):
         """
         Yes no input
@@ -72,7 +98,11 @@ class Input(object):
         :return:            Integer
         """
 
-        result = self._input('%s %s ' % (description, self._output.color('(y/n)', 'yellow')))
+        if description:
+            sys.stdout.write('%s ' % description)
+            sys.stdout.flush()
+
+        result = self._input(self._output.color('(y/n) ', 'yellow'))
 
         return result == 'y'
 

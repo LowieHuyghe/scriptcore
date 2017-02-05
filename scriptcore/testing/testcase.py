@@ -103,7 +103,7 @@ class TestCase(unittest.TestCase):
         tests_dir = os.path.abspath(tests_dir)
         return tests_dir
 
-    def rand_str(self, length = 20):
+    def rand_str(self, length=20):
         """
         Get random string of certain length
         :param length:  The length of the string
