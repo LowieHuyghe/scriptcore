@@ -99,6 +99,26 @@ class TestOutput(TestCase):
         self.assert_in(text, self.stdout.getvalue())
         self.assert_in(text2, self.stdout.getvalue())
 
+    def test_no_new_line(self):
+        """
+        Test no new line
+        :return:    void
+        """
+
+        text = self.rand_str()
+        text2 = self.rand_str()
+
+        output = Output()
+
+        output.default(text, newline=False)
+        self.assert_in(text, self.stdout.getvalue())
+        self.assert_not_in(text2, self.stdout.getvalue())
+
+        output.default(text2, newline=False)
+        self.assert_in(text, self.stdout.getvalue())
+        self.assert_in(text2, self.stdout.getvalue())
+        self.assert_in('\r%s\r%s' % (text, text2), self.stdout.getvalue())
+
     def test_color(self):
         """
         Test default-function
