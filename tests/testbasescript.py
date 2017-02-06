@@ -9,6 +9,7 @@ try:
 except ImportError:
     from io import StringIO
 import sys
+import types
 
 
 class TestBaseScript(TestCase):
@@ -221,10 +222,137 @@ class TestBaseScript(TestCase):
                                         self.assert_equal(option.default, script._get_option(option.short))
                                         self.assert_equal(option2.default, script._get_option(option2.short))
 
+    def test_run_basic(self):
+        """
+        Test the run basic functions
+        :return:    void
+        """
+
+        title = self.rand_str()
+        description = self.rand_str()
+        option = Option('a', 'is an option', default=None, long='aaaa', type=None)
+        script = TestScript(self.base_path, title, description, arguments=['-%s' % option.short])
+        script._register_option(option.short, option.description, option.default, option.long, option.type)
+
+        # Not analyzed yet
+        self.assert_false(script._has_option(option.short))
+        self.assert_not_in(title, self.stdout.getvalue())
+        self.assert_not_in(description, self.stdout.getvalue())
+
+        script.run()
+
+        # Analyzed and printed help
+        self.assert_true(script._has_option(option.short))
+        self.assert_in(title, self.stdout.getvalue())
+        self.assert_in(description, self.stdout.getvalue())
+
+    def test_run_commands(self):
+        """
+        Test the run commands
+        :return:    void
+        """
+
+        command_callback_check = []
+
+        def command_callback(arguments=None):
+            command_callback_check.append(arguments)
+
+        commands = [
+            Command('this', 'is a command', command_callback),
+            Command('second', 'command this is', TestSubScript)
+        ]
+        title = self.rand_str()
+        description = self.rand_str()
+
+        for command in commands:
+            for command2 in commands:
+                for provide in [True, False]:
+                    for provide2 in [True, False]:
+                        # Skip if same command
+                        if command is not None and command2 is not None and command == command2:
+                            continue
+
+                        # Setup arguments
+                        arguments = []
+                        if provide:
+                            arguments.append(command.command)
+                        if provide2:
+                            arguments.append(command2.command)
+
+                        # Clear output
+                        self.stdout = sys.stdout = StringIO()
+                        command_callback_check = []
+                        TestSubScript.command_callback_check = []
+
+                        # Construct script
+                        script = TestScript(self.base_path, title, description, arguments=arguments)
+                        script._register_command(command.command, command.description, command.callback)
+                        script._register_command(command2.command, command2.description, command2.callback)
+
+                        # Check beforehand
+                        self.assert_not_in(title, self.stdout.getvalue())
+                        self.assert_not_in(description, self.stdout.getvalue())
+                        self.assert_false(script._has_command(command.command))
+                        self.assert_false(script._has_command(command2.command))
+
+                        # Run
+                        script.run()
+
+                        if not provide and not provide2:
+                            self.assert_in(title, self.stdout.getvalue())
+                            self.assert_in(description, self.stdout.getvalue())
+                        else:
+                            self.assert_not_in(title, self.stdout.getvalue())
+                            self.assert_not_in(description, self.stdout.getvalue())
+
+                            # Check if command given
+                            self.assert_equal(provide, script._has_command(command.command))
+                            # Second command won't run if first was given
+                            self.assert_equal(not provide and provide2, script._has_command(command2.command))
+
+                            if provide:
+                                if isinstance(command.callback, types.FunctionType):
+                                    self.assert_equal(1, len(command_callback_check))
+                                    self.assert_equal_deep(arguments[1:], command_callback_check[0])
+                                else:
+                                    self.assert_equal(1, len(TestSubScript.command_callback_check))
+                                    self.assert_equal_deep(arguments[1:], TestSubScript.command_callback_check[0])
+                                if isinstance(command2.callback, types.FunctionType):
+                                    self.assert_equal(0, len(command_callback_check))
+                                else:
+                                    self.assert_equal(0, len(TestSubScript.command_callback_check))
+                            elif provide2:
+                                if isinstance(command2.callback, types.FunctionType):
+                                    self.assert_equal(1, len(command_callback_check))
+                                    self.assert_equal_deep(arguments[1:], command_callback_check[0])
+                                else:
+                                    self.assert_equal(1, len(TestSubScript.command_callback_check))
+                                    self.assert_equal_deep(arguments[1:], TestSubScript.command_callback_check[0])
+                                if isinstance(command.callback, types.FunctionType):
+                                    self.assert_equal(0, len(command_callback_check))
+                                else:
+                                    self.assert_equal(0, len(TestSubScript.command_callback_check))
+
 
 class TestScript(BaseScript):
     pass
 
 
 class TestSubScript(BaseScript):
-    pass
+
+    command_callback_check = []
+
+    def __init__(self, base_path, arguments=None):
+        super(TestSubScript, self).__init__(base_path, 'Test sub script', 'Test sub description', arguments=arguments)
+
+    def run(self):
+        self._run()
+
+    def _run(self):
+        """
+        Run the script
+        :return:    void
+        """
+
+        TestSubScript.command_callback_check.append(self._arguments)
+        self.help()

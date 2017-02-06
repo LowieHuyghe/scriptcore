@@ -46,7 +46,6 @@ class BaseScript(object):
         self._title = title
         self._description = description
         self._arguments = arguments if arguments is not None else sys.argv[1::]
-        self._analyzed_arguments = False
 
         self.output = Output()
         self.input = Input()
@@ -86,7 +85,7 @@ class BaseScript(object):
             # Check commands
             for command in self._commands.values():
                 if command.command == argument:
-                    command.arguments = self._arguments[i + 1::]
+                    command.arguments = self._arguments[i + 1:]
                     command.given = True
                     return
 
