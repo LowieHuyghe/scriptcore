@@ -18,7 +18,10 @@ class TestCheckBox(TestCase):
             changed_checkbox.append(checkbox)
 
         checkbox = CheckBox(self.rand_str(), on_change=change_handler)
-        checkbox.value = True
 
         self.assert_is_instance(checkbox, ACheckBox)
-        self.assert_equal(checkbox, changed_checkbox[0])
+        for value in [True, False, True]:
+            previous_count = len(changed_checkbox)
+            checkbox.value = value
+            self.assert_equal(previous_count + 1, len(changed_checkbox))
+            self.assert_equal(checkbox, changed_checkbox[-1])
