@@ -12,11 +12,14 @@ class TestOutput(TestCase):
         """
 
         text = self.rand_str()
+        text2 = self.rand_str()
 
         output = Output()
         output.title(text)
+        output(text2, type='title')
 
         self.assert_in(text, self.stdout.getvalue())
+        self.assert_in(text2, self.stdout.getvalue())
 
     def test_subtitle(self):
         """
@@ -25,11 +28,14 @@ class TestOutput(TestCase):
         """
 
         text = self.rand_str()
+        text2 = self.rand_str()
 
         output = Output()
         output.subtitle(text)
+        output(text2, type='subtitle')
 
         self.assert_in(text, self.stdout.getvalue())
+        self.assert_in(text2, self.stdout.getvalue())
 
     def test_success(self):
         """
@@ -38,11 +44,14 @@ class TestOutput(TestCase):
         """
 
         text = self.rand_str()
+        text2 = self.rand_str()
 
         output = Output()
         output.success(text)
+        output(text2, type='success')
 
         self.assert_in(text, self.stdout.getvalue())
+        self.assert_in(text2, self.stdout.getvalue())
 
     def test_error(self):
         """
@@ -51,11 +60,14 @@ class TestOutput(TestCase):
         """
 
         text = self.rand_str()
+        text2 = self.rand_str()
 
         output = Output()
         output.error(text)
+        output(text2, type='error')
 
         self.assert_in(text, self.stdout.getvalue())
+        self.assert_in(text2, self.stdout.getvalue())
 
     def test_warning(self):
         """
@@ -64,11 +76,14 @@ class TestOutput(TestCase):
         """
 
         text = self.rand_str()
+        text2 = self.rand_str()
 
         output = Output()
         output.warning(text)
+        output(text2, type='warning')
 
         self.assert_in(text, self.stdout.getvalue())
+        self.assert_in(text2, self.stdout.getvalue())
 
     def test_info(self):
         """
@@ -77,11 +92,14 @@ class TestOutput(TestCase):
         """
 
         text = self.rand_str()
+        text2 = self.rand_str()
 
         output = Output()
         output.info(text)
+        output(text2, type='info')
 
         self.assert_in(text, self.stdout.getvalue())
+        self.assert_in(text2, self.stdout.getvalue())
 
     def test_default(self):
         """
