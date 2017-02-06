@@ -63,21 +63,41 @@ class TestOption(TestCase):
         """
 
         prop_short = 's'
+        prop_long = 'ssss'
         prop_description = 'this is a description'
-        prop_value = 'value'
-        prop_given = True
 
-        option = Option(prop_short, prop_description)
-        option.value = prop_value
-        option.given = prop_given
+        for prop_type in [None, Option.type_list]:
+            for prop_given in [True, False]:
+                for prop_value in [None, 'value']:
+                    for prop_default in [None, 0, 'default', ['default']]:
+                        for reset in [True, False]:
 
-        self.assert_equal(prop_value, option.value)
-        self.assert_equal(prop_given, option.given)
+                            option = Option(prop_short, prop_description, default=prop_default, long=prop_long, type=prop_type)
+                            option.given = prop_given
+                            if prop_given:
+                                option.value = prop_value
 
-        option.reset()
+                            # Reset
+                            if reset:
+                                option.reset()
 
-        self.assert_equal(None, option.value)
-        self.assert_equal(False, option.given)
+                            # Check
+                            self.assert_equal(not reset and prop_given, option.given)
+                            if not reset and prop_given and prop_value is not None:
+                                self.assert_equal(prop_value, option.value)
+                            else:
+                                if prop_type == Option.type_list:
+                                    if prop_default is None:
+                                        self.assert_equal_deep([], option.value)
+                                    elif not isinstance(prop_default, list):
+                                        self.assert_equal_deep([prop_default], option.value)
+                                    else:
+                                        self.assert_equal_deep(prop_default, option.value)
+                                else:
+                                    if isinstance(prop_default, list):
+                                        self.assert_equal_deep(prop_default[0], option.value)
+                                    else:
+                                        self.assert_equal_deep(prop_default, option.value)
 
     def test_value_given_default(self):
         """

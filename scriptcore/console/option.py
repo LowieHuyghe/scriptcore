@@ -16,18 +16,12 @@ class Option(object):
         self.short = short
         self.description = description
         self.long = long
-        self.given = False
         self.type = type
-        if self.type == Option.type_list and default is None:
-            self.default = []
-        elif self.type == Option.type_list and not isinstance(default, list):
-            self.default = [default]
-        else:
-            self.default = default
-        if self.type == Option.type_list:
-            self._value = []
-        else:
-            self._value = None
+        self.default = default
+        self.given = False
+        self._value = None
+        # Reset to format the default value, and the value
+        self.reset()
 
     @property
     def value(self):
@@ -55,6 +49,7 @@ class Option(object):
         """
 
         self.given = False
+
         if self.type == Option.type_list:
             self._value = []
             if self.default is None:
@@ -63,7 +58,7 @@ class Option(object):
                 self.default = [self.default]
         else:
             self._value = None
-            if not self.default:
+            if self.default is []:
                 self.default = None
             elif isinstance(self.default, list):
                 self.default = self.default[0]
