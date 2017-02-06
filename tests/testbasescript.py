@@ -47,7 +47,10 @@ class TestBaseScript(TestCase):
         :return:    void
         """
 
-        script = TestScript(self.base_path, self.rand_str(), self.rand_str())
+        # Add / to the end
+        base_path = '%s%s' % (self.base_path, os.path.sep)
+        # Construct the script
+        script = TestScript(base_path, self.rand_str(), self.rand_str())
 
         self.assert_equal(self.base_path, script.get_path(''))
         self.assert_equal(os.path.join(self.base_path, 'test.txt'), script.get_path('test.txt'))

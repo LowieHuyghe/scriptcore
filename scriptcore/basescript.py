@@ -40,7 +40,7 @@ class BaseScript(object):
 
         BaseScript._current_script = self
 
-        if base_path[-1:1] == os.path.sep:
+        if base_path[-1] == os.path.sep:
             base_path = base_path[:-1]
         self._base_path = base_path
         self.config = Config()
