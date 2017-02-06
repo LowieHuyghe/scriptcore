@@ -23,5 +23,6 @@ class TestCheckBox(TestCase):
         for value in [True, False, True]:
             previous_count = len(changed_checkbox)
             checkbox.value = value
+            self.assert_equal(value, checkbox.value)
             self.assert_equal(previous_count + 1, len(changed_checkbox))
             self.assert_equal(checkbox, changed_checkbox[-1])
