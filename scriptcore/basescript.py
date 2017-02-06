@@ -6,7 +6,7 @@ from scriptcore.console.input.input import Input
 from scriptcore.console.command import Command
 from scriptcore.process.execute import Execute
 from scriptcore.console.option import Option
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 import traceback
 import os.path
 import types
@@ -38,6 +38,8 @@ class BaseScript(object):
 
         BaseScript._current_script = self
 
+        if base_path[-1:1] == os.path.sep:
+            base_path = base_path[:-1]
         self._base_path = base_path
         self.config = Config()
 
@@ -58,6 +60,9 @@ class BaseScript(object):
         :param filename:
         :return:
         """
+
+        if not filename:
+            return self._base_path
 
         if filename[0:1] == os.path.sep:
             filename = filename[1::]
@@ -126,6 +131,15 @@ class BaseScript(object):
             option.reset()
         for command in self._commands.values():
             command.reset()
+
+    def _has_command(self, command):
+        """
+        Check if has command
+        :param command: The command
+        :return:        Has command
+        """
+
+        return self._commands[command].given
 
     def _has_option(self, short):
         """
