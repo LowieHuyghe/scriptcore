@@ -6,6 +6,8 @@ from scriptcore.console.input.input import Input
 from scriptcore.console.command import Command
 from scriptcore.process.execute import Execute
 from scriptcore.console.option import Option
+from scriptcore.console.errors.unknowncommanderror import UnknownCommandError
+from scriptcore.console.errors.unknownoptionerror import UnknownOptionError
 from abc import ABCMeta
 import traceback
 import os.path
@@ -99,7 +101,7 @@ class BaseScript(object):
                         option_given = True
                         break
                 if not option_given:
-                    raise RuntimeError('Unknown option "%s" given' % argument)
+                    raise UnknownOptionError(argument)
 
             elif argument[:1] == '-':
                 option_given = False
@@ -110,7 +112,7 @@ class BaseScript(object):
                         option_given = True
                         break
                 if not option_given:
-                    raise RuntimeError('Unknown option "%s" given' % argument)
+                    raise UnknownOptionError(argument)
 
             elif last_option:
                 last_option.add_value(argument)
@@ -118,7 +120,7 @@ class BaseScript(object):
                     last_option = None
 
             else:
-                raise RuntimeError('Unknown command "%s" given' % argument)
+                raise UnknownCommandError(argument)
 
     def _reset_arguments(self):
         """

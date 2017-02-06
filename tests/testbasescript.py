@@ -3,6 +3,8 @@ from scriptcore.testing.testcase import TestCase
 from scriptcore.basescript import BaseScript
 from scriptcore.console.command import Command
 from scriptcore.console.option import Option
+from scriptcore.console.errors.unknowncommanderror import UnknownCommandError
+from scriptcore.console.errors.unknownoptionerror import UnknownOptionError
 import os.path
 try:
     from cStringIO import StringIO
@@ -161,8 +163,9 @@ class TestBaseScript(TestCase):
         options = [
             Option('a', 'is an option', default=None, long='aaaa', type=None),
             Option('b', 'is bn option', default=['defbult b'], long='bbbb', type=Option.type_list),
+            Option('c', 'is cn option', default=['defcult c'], long='cccc', type=Option.type_list),
         ]
-        for option in options:
+        for option in options[:-1]:
             script._register_option(option.short, option.description, option.default, option.long, option.type)
 
         for option in options:
@@ -196,7 +199,13 @@ class TestBaseScript(TestCase):
 
                                         # Add and analyze
                                         script._arguments = arguments
-                                        script._analyze_arguments()
+                                        if option == options[-1] or option2 == options[-1]:
+                                            if (provide and option == options[-1]) or (provide2 and option2 == options[-1]):
+                                                with self.assert_raises(UnknownOptionError):
+                                                    script._analyze_arguments()
+                                            continue
+                                        else:
+                                            script._analyze_arguments()
 
                                         # Check provided
                                         self.assert_equal(provide, script._has_option(option.short))
@@ -259,7 +268,8 @@ class TestBaseScript(TestCase):
 
         commands = [
             Command('this', 'is a command', command_callback),
-            Command('second', 'command this is', TestSubScript)
+            Command('second', 'command this is', TestSubScript),
+            Command('third', 'this one won\'t be registered', TestSubScript),
         ]
         title = self.rand_str()
         description = self.rand_str()
@@ -286,17 +296,19 @@ class TestBaseScript(TestCase):
 
                         # Construct script
                         script = TestScript(self.base_path, title, description, arguments=arguments)
-                        script._register_command(command.command, command.description, command.callback)
-                        script._register_command(command2.command, command2.description, command2.callback)
-
-                        # Check beforehand
-                        self.assert_not_in(title, self.stdout.getvalue())
-                        self.assert_not_in(description, self.stdout.getvalue())
-                        self.assert_false(script._has_command(command.command))
-                        self.assert_false(script._has_command(command2.command))
+                        if command != commands[-1]:
+                            script._register_command(command.command, command.description, command.callback)
+                        if command2 != commands[-1]:
+                            script._register_command(command2.command, command2.description, command2.callback)
 
                         # Run
-                        script.run()
+                        if command == commands[-1] or command2 == commands[-1]:
+                            if (provide and command == commands[-1]) or (not provide and provide2 and command2 == commands[-1]):
+                                with self.assert_raises(UnknownCommandError):
+                                    script.run()
+                            continue
+                        else:
+                            script.run()
 
                         if not provide and not provide2:
                             self.assert_in(title, self.stdout.getvalue())
@@ -335,7 +347,10 @@ class TestBaseScript(TestCase):
 
 
 class TestScript(BaseScript):
-    pass
+
+    def run(self):
+        self._analyze_arguments()
+        self._run()
 
 
 class TestSubScript(BaseScript):
