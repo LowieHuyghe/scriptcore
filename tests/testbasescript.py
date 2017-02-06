@@ -348,6 +348,39 @@ class TestBaseScript(TestCase):
                                 else:
                                     self.assert_equal(0, len(TestSubScript.command_callback_check))
 
+    def test_run_natural(self):
+        """
+        Test natural run behaviour
+        :return:    void
+        """
+
+        def callback_keyboard_interrupt(arguments=None):
+            raise KeyboardInterrupt('keyboardinterrupt')
+
+        callback_unhandlederror_message = self.rand_str()
+
+        def callback_unhandlederror(arguments=None):
+            raise RuntimeError(callback_unhandlederror_message)
+
+        commands = [
+            Command('keyboardinterrupt', 'keyboardinterrupt', callback_keyboard_interrupt),
+            Command('unhandlederror', 'unhandlederror', callback_unhandlederror),
+        ]
+
+        # Keyboard interrupt should be catched
+        script = TestScriptNatural(self.base_path, self.rand_str(), self.rand_str(), arguments=['keyboardinterrupt'])
+        for command in commands:
+            script._register_command(command.command, command.description, command.callback)
+            with self.assert_raises(SystemExit):
+                script.run()
+
+        # Unhandled error
+        script = TestScriptNatural(self.base_path, self.rand_str(), self.rand_str(), arguments=['unhandlederror'])
+        for command in commands:
+            script._register_command(command.command, command.description, command.callback)
+        script.run()
+        self.assert_in(callback_unhandlederror_message, self.stdout.getvalue())
+
 
 class TestScript(BaseScript):
 
@@ -374,3 +407,6 @@ class TestSubScript(BaseScript):
 
         TestSubScript.command_callback_check.append(self._arguments)
         self.help()
+
+class TestScriptNatural(BaseScript):
+    pass
