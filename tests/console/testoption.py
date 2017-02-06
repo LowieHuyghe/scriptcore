@@ -69,7 +69,7 @@ class TestOption(TestCase):
         for prop_type in [None, Option.type_list]:
             for prop_given in [True, False]:
                 for prop_value in [None, 'value']:
-                    for prop_default in [None, 0, 'default', ['default']]:
+                    for prop_default in [None, 0, [], 'default', ['default']]:
                         for reset in [True, False]:
 
                             option = Option(prop_short, prop_description, default=prop_default, long=prop_long, type=prop_type)
@@ -95,7 +95,10 @@ class TestOption(TestCase):
                                         self.assert_equal_deep(prop_default, option.value)
                                 else:
                                     if isinstance(prop_default, list):
-                                        self.assert_equal_deep(prop_default[0], option.value)
+                                        if not prop_default:
+                                            self.assert_equal_deep(None, option.value)
+                                        else:
+                                            self.assert_equal_deep(prop_default[0], option.value)
                                     else:
                                         self.assert_equal_deep(prop_default, option.value)
 

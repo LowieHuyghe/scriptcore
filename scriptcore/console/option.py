@@ -58,7 +58,8 @@ class Option(object):
                 self.default = [self.default]
         else:
             self._value = None
-            if self.default is []:
-                self.default = None
-            elif isinstance(self.default, list):
-                self.default = self.default[0]
+            if isinstance(self.default, list):
+                if not self.default:
+                    self.default = None
+                else:
+                    self.default = self.default[0]
