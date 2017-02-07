@@ -2,6 +2,7 @@
 from scriptcore.testing.testcase import TestCase
 import unittest
 import sys
+import os
 
 
 class TestTestCase(unittest.TestCase):
@@ -13,6 +14,15 @@ class TestTestCase(unittest.TestCase):
         """
 
         self._testCase = TestCase(methodName='assertEqual')
+        self._testCase.setUp()
+
+    def tearDown(self):
+        """
+        Tear down the test
+        :return:    void
+        """
+
+        self._testCase.tearDown()
 
     def test_compare_methods(self):
         """
@@ -40,7 +50,7 @@ class TestTestCase(unittest.TestCase):
             (self.assertIsInstance,     self._testCase.assert_is_instance,      2,  ([], [type])),
             (self.assertNotIsInstance,  self._testCase.assert_not_is_instance,  2,  ([], [type])),
             (self.assertDictEqual,      self._testCase.assert_dict_equal,       2,  ([dict], [dict])),
-            (self.assertListEqual,      self._testCase.assertListEqual,         2,  ([list], [list])),
+            (self.assertListEqual,      self._testCase.assert_list_equal,         2,  ([list], [list])),
             (self.assertTupleEqual,     self._testCase.assert_tuple_equal,      2,  ([tuple], [tuple])),
             (self.assertSequenceEqual,  self._testCase.assert_sequence_equal,   2,  ([tuple, list, str], [tuple, list, str])),
             (self.assertMultiLineEqual, self._testCase.assert_multi_line_equal, 2,  ([str], [str])),
@@ -193,3 +203,36 @@ class TestTestCase(unittest.TestCase):
             if not catch_exceptions:
                 raise
             return False
+
+    def test_skip(self):
+        """
+        Test skipping test
+        :return:    void
+        """
+
+        self._testCase.skip('For testing purposes')
+        raise RuntimeError('Should be skipped')
+
+    def test_temp(self):
+        """
+        Test temp directories and files
+        :return:    void
+        """
+
+        dir = self._testCase.temp_dir()
+        if not os.path.isdir(dir):
+            os.makedirs(dir)
+        if not os.path.isdir(dir):
+            raise RuntimeError('Temp dir still does not exist')
+
+        file = self._testCase.temp_file()
+        if not os.path.isfile(file):
+            open(file, 'a').close()
+
+        self.assertTrue(os.path.isdir(dir))
+        self.assertTrue(os.path.isfile(file))
+
+        self._testCase.tearDown()
+
+        self.assertFalse(os.path.isdir(dir))
+        self.assertFalse(os.path.isfile(file))

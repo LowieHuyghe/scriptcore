@@ -292,8 +292,7 @@ class TestCase(unittest.TestCase):
         """
         return self.assertDictEqual(a, b)
 
-    @unittest.skip
-    def skip_test(self, reason):
+    def skip(self, reason):
         """
         Skip this test
         """
