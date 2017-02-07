@@ -206,6 +206,8 @@ class TestCase(unittest.TestCase):
         """
         fun(*args, **kwds) raises exc and the message matches regex r
         """
+        if sys.version_info >= (3, 0):
+            return self.assertRaisesRegex(exc, r, *args, **kwds)
         return self.assertRaisesRegexp(exc, r, *args, **kwds)
 
     def assert_almost_equal(self, a, b):
@@ -248,25 +250,17 @@ class TestCase(unittest.TestCase):
         """
         r.search(s)
         """
+        if sys.version_info >= (3, 0):
+            return self.assertRegex(s, r)
         return self.assertRegexpMatches(s, r)
 
     def assert_not_regexp_matches(self, s, r):
         """
         not r.search(s)
         """
+        if sys.version_info >= (3, 0):
+            return self.assertNotRegex(s, r)
         return self.assertNotRegexpMatches(s, r)
-
-    def assert_items_equal(self, a, b):
-        """
-        sorted(a) == sorted(b) and works with unhashable objs
-        """
-        return self.assertItemsEqual(a, b)
-
-    def assert_dict_contains_subset(self, a, b):
-        """
-        all the key/value pairs in a exist in b
-        """
-        return self.assertDictContainsSubset(a, b)
 
     def assert_multi_line_equal(self, a, b):
         """
@@ -291,12 +285,6 @@ class TestCase(unittest.TestCase):
         tuples
         """
         return self.assertTupleEqual(a, b)
-
-    def assert_set_equal(self, a, b):
-        """
-        sets or frozensets
-        """
-        return self.assertSetEqual(a, b)
 
     def assert_dict_equal(self, a, b):
         """
