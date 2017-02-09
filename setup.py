@@ -8,6 +8,11 @@ try:
     import ConfigParser
 except ImportError:
     import configparser as ConfigParser
+try:
+    from urllib2 import urlopen, URLError
+except ImportError:
+    from urllib.request import urlopen
+    from urllib.error import URLError
 
 
 # The path to the classifiers and the config
@@ -38,8 +43,24 @@ class Setup(object):
         :return:                    list
         """
 
+        classifiers_path = os.path.join(self.base_path, classifiers_path)
+
+        # Get classifiers if not already fetched
+        if not os.path.isfile(classifiers_path):
+            try:
+                url = 'https://pypi.python.org/pypi?%3Aaction=list_classifiers'
+                response = urlopen(url)
+                classifiers_data = response.read().decode('utf-8')
+            except URLError:
+                self.exit('Could not fetch classifiers from \'%s\'' % url)
+
+            with open(classifiers_path, 'w') as classifiers_file:
+                classifiers_file.write('# See https://pypi.python.org/pypi?%3Aaction=list_classifiers\n')
+                classifiers_file.write(classifiers_data)
+
+        # Read classifiers
         classifiers = []
-        with open(os.path.join(self.base_path, classifiers_path)) as classifiers_file:
+        with open(classifiers_path, 'r') as classifiers_file:
             for classifier_line in classifiers_file:
                 classifier_match = re.search('^([^#]*)', classifier_line)
                 if not classifier_match:
@@ -48,6 +69,9 @@ class Setup(object):
                 if not classifier:
                     continue
                 classifiers.append(classifier)
+
+        if not classifiers:
+            self.exit('No classifiers were found in \'%s\'\nDelete the file and try again.' % classifiers_path)
 
         return classifiers
 
