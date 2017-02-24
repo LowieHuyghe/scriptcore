@@ -1,4 +1,4 @@
-appdirs==1.4.1
+appdirs==1.4.2
 asciimatics==1.7.2
 funcsigs==1.0.2
 future==0.16.0
