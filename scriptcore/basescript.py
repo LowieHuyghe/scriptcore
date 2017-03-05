@@ -203,6 +203,7 @@ class BaseScript(object):
 
             self.output.error('Error: %s\n%s' % (e, e_tb))
             self.output('')
+            exit(1)
 
     def _run(self):
         """

@@ -378,7 +378,8 @@ class TestBaseScript(TestCase):
         script = TestScriptNatural(self.base_path, self.rand_str(), self.rand_str(), arguments=['unhandlederror'])
         for command in commands:
             script._register_command(command.command, command.description, command.callback)
-        script.run()
+        with self.assert_raises(SystemExit):
+            script.run()
         self.assert_in(callback_unhandlederror_message, self.stdout.getvalue())
 
 
@@ -407,6 +408,7 @@ class TestSubScript(BaseScript):
 
         TestSubScript.command_callback_check.append(self._arguments)
         self.help()
+
 
 class TestScriptNatural(BaseScript):
     pass
