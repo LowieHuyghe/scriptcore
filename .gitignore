@@ -90,3 +90,7 @@ ENV/
 
 # OS X
 .DS_Store
+
+# GitBook
+_book/
+docs/_book/
