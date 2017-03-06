@@ -9,8 +9,8 @@ before_install:
   - git config --global user.email "travis@travis-ci.org"
   - git config --global user.name "Travis CI"
   - mkdir -p ~/.ssh
-  - echo "$SSH_ID_RSA_PUB" > ~/.ssh/id_rsa
-  - cat ~/.ssh/id_rsa
+  - echo "$SSH_ID_RSA" > ~/.ssh/id_rsa
+  - echo "$SSH_ID_RSA_PUB" > ~/.ssh/id_rsa.pub
 # Install dependencies
 install:
   - pip install -r requirements.txt
@@ -20,7 +20,8 @@ script:
   coverage run --source=scriptcore setup.py test
 # Trigger coverall
 after_success:
-  coveralls
+  - coveralls
+  - python setup.py docs_publish
 
 # Notifications
 notifications:
