@@ -1,0 +1,3 @@
+[submodule "bin/gitbook"]
+	path = bin/gitbook
+	url = git@github.com:LowieHuyghe/python-package-gitbook-tools.git
