@@ -1,6 +1,6 @@
 [submodule "bin/gitbook"]
 	path = bin/gitbook
-	url = git@github.com:LowieHuyghe/python-package-gitbook-tools.git
+	url = https://github.com/LowieHuyghe/python-package-gitbook-tools.git
 [submodule "setup"]
 	path = setup
-	url = git@github.com:LowieHuyghe/python-package-easier-setup-script.git
+	url = https://github.com/LowieHuyghe/python-package-easier-setup-script.git
