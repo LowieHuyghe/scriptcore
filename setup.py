@@ -4,6 +4,9 @@ import pprint
 import re
 import setuptools
 import sys
+import distutils.cmd
+import distutils.log
+from subprocess import Popen
 try:
     import ConfigParser
 except ImportError:
@@ -218,6 +221,42 @@ class Setup(object):
         self._process_argument(packages_arguments, 'include', 'packages', 'include', list)
         if packages_arguments:
             setup_arguments['packages'] = setuptools.find_packages(**packages_arguments)
+
+        # Commands
+        commands = dict()
+        if 'commands' in self.config:
+            for command_name in self.config['commands']:
+                if command_name.endswith('-description'):
+                    continue
+                description_name = '%s-description' % command_name
+
+                given_command = self._process_value('commands', command_name, str)
+                if description_name in self.config['commands']:
+                    given_description = self.config['commands'][description_name]
+                else:
+                    given_description = given_command
+
+                class CustomCommand(distutils.cmd.Command):
+                    command = given_command
+                    description = given_description
+                    user_options = []
+
+                    def initialize_options(self):
+                        """Set default values for options."""
+                        pass
+
+                    def finalize_options(self):
+                        """Post-process options."""
+                        pass
+
+                    def run(self):
+                        """Run command."""
+                        process = Popen(self.command, shell=True)
+                        process.wait()
+
+                commands[command_name] = CustomCommand
+        if commands:
+            setup_arguments['cmdclass'] = commands
 
         return setup_arguments
 
