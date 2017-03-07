@@ -4,24 +4,29 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-# Configure git and add ssh keys
-before_install:
-  - git config --global user.email "travis@travis-ci.org"
-  - git config --global user.name "Travis CI"
-  - mkdir -p ~/.ssh
-  - echo "$SSH_ID_RSA" > ~/.ssh/id_rsa
-  - echo "$SSH_ID_RSA_PUB" > ~/.ssh/id_rsa.pub
 # Install dependencies
 install:
   - pip install -r requirements.txt
   - pip install coveralls
 # Run the tests
 script:
-  coverage run --source=scriptcore setup.py test
+  - coverage run --source=scriptcore setup.py test
 # Trigger coverall
 after_success:
   - coveralls
-  - python setup.py docs_publish
+
+# Deploy
+before_deploy:
+  - python setup.py docs_build
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: _book
+    on:
+      branch: master
+      pyton: "2.7"
+
 
 # Notifications
 notifications:
