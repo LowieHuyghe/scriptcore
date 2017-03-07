@@ -25,7 +25,7 @@ deploy:
     local_dir: _book
     on:
       branch: master
-      python: "2.7"
+      python: "3.6"
 
 
 notifications:
