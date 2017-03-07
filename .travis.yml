@@ -1,21 +1,21 @@
+
 language: python
 python:
   - "2.7"
-  - "3.3"
   - "3.4"
   - "3.5"
-# Install dependencies
+  - "3.6"
+
+
 install:
   - pip install -r requirements.txt
   - pip install coveralls
-# Run the tests
 script:
   - coverage run --source=scriptcore setup.py test
-# Trigger coverall
 after_success:
   - coveralls
 
-# Deploy
+
 before_deploy:
   - python setup.py docs_build
 deploy:
@@ -25,10 +25,9 @@ deploy:
     local_dir: _book
     on:
       branch: master
-      pyton: "2.7"
+      python: "2.7"
 
 
-# Notifications
 notifications:
   slack:
     rooms:
