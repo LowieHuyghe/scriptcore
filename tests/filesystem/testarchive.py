@@ -13,7 +13,7 @@ class TestArchive(TestCase):
         :return:    void
         """
 
-        directory = self.tests_dir()
+        directory = self.directory()
         archive = self.temp_file(only_path=True, suffix='.zip')
         target_directory = self.temp_dir(only_path=True)
 

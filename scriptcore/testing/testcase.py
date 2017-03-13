@@ -92,7 +92,7 @@ class TestCase(unittest.TestCase):
         self._temp_dirs.append(path)
         return path
 
-    def tests_dir(self):
+    def directory(self):
         """
         Get the tests directory
         :return:    Directory
@@ -111,6 +111,16 @@ class TestCase(unittest.TestCase):
         """
 
         return Encoding.normalize(''.join(random.choice(string.ascii_lowercase) for i in range(length)))
+
+    def rand_int(self, min, max):
+        """
+        Get random integer
+        :param min: Minimum value (included)
+        :param max: Maximum value (included)
+        :return:    Random integer
+        """
+
+        return random.randint(min, max)
 
     def setUp(self):
         """

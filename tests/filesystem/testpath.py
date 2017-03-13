@@ -12,7 +12,7 @@ class TestPath(TestCase):
         :return:    void
         """
 
-        directory = self.tests_dir()
+        directory = self.directory()
 
         exp_size = 0
         for dirpath, direnames, filenames in os.walk(directory):
