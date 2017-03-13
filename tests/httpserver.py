@@ -49,7 +49,8 @@ class HttpServer(object):
                                               keyfile=key_file,
                                               certfile=cert_file,
                                               server_side=True)
-        ssl._create_default_https_context = ssl._create_unverified_context
+        if hasattr(ssl, '_create_unverified_context'):
+            ssl._create_default_https_context = ssl._create_unverified_context
 
         self._thread = threading.Thread(target=self._server.serve_forever)
         self._thread.start()
@@ -64,13 +65,12 @@ class HttpServer(object):
         if not self._thread:
             return False
 
+        sleep(0.01)
         self._data = self._server.data
 
         self._server.shutdown()
         self._thread = None
         self._server = None
-
-        sleep(0.01)
 
         return True
 
