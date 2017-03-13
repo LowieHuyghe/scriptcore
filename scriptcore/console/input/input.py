@@ -113,7 +113,7 @@ class Input(object):
         :return:            The user input
         """
 
-        try:
+        if sys.version_info < (3, 0):
             return raw_input(description)
-        except NameError:
+        else:
             return input(description)

@@ -1,4 +1,7 @@
 
+import sys
+
+
 class Encoding(object):
 
     @staticmethod
@@ -10,10 +13,9 @@ class Encoding(object):
         """
 
         # Python 2 vs Python 3
-        try:
-            unicode
+        if sys.version_info < (3, 0):
             return Encoding.to_ascii(value)
-        except NameError:
+        else:
             return Encoding.to_unicode(value)
 
     @staticmethod
@@ -91,10 +93,9 @@ class Encoding(object):
         """
 
         # Python 2 vs Python 3
-        try:
-            unicode
+        if sys.version_info < (3, 0):
             return isinstance(value, str)
-        except NameError:
+        else:
             return isinstance(value, bytes)
 
     @staticmethod
@@ -106,8 +107,7 @@ class Encoding(object):
         """
 
         # Python 2 vs Python 3
-        try:
-            unicode
+        if sys.version_info < (3, 0):
             return isinstance(value, unicode)
-        except NameError:
+        else:
             return isinstance(value, str)

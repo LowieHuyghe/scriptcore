@@ -1,7 +1,8 @@
 
-try:
+import sys
+if sys.version_info < (3, 0):
     import ConfigParser
-except ImportError:
+else:
     import configparser as ConfigParser
 import json
 from scriptcore.encoding.encoding import Encoding

@@ -4,11 +4,11 @@ import os
 import tempfile
 import unittest
 import shutil
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
 import sys
+if sys.version_info < (3, 0):
+    from cStringIO import StringIO
+else:
+    from io import StringIO
 import random
 import string
 

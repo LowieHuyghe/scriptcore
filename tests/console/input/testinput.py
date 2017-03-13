@@ -2,6 +2,7 @@
 from scriptcore.testing.testcase import TestCase
 from scriptcore.console.input.input import Input
 import mock
+import sys
 
 
 class TestInput(TestCase):
@@ -201,8 +202,7 @@ class TestInput(TestCase):
         :return:    Patchable input
         """
 
-        try:
-            raw_input
+        if sys.version_info < (3, 0):
             return '__builtin__.raw_input'
-        except NameError:
+        else:
             return 'builtins.input'

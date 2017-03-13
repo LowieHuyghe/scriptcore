@@ -1,6 +1,7 @@
 
 from scriptcore.testing.testcase import TestCase
 from scriptcore.encoding.encoding import Encoding
+import sys
 
 
 class TestEncoding(TestCase):
@@ -20,8 +21,7 @@ class TestEncoding(TestCase):
                 u'listvalue3',
             ]
         }
-        try:
-            unicode
+        if sys.version_info < (3, 0):
             expected = {
                 'key1'.encode('ascii'): 'value1'.encode('ascii'),
                 'key2'.encode('ascii'): 'value2'.encode('ascii'),
@@ -31,7 +31,7 @@ class TestEncoding(TestCase):
                     'listvalue3'.encode('ascii'),
                 ]
             }
-        except NameError:
+        else:
             expected = {
                 u'key1': u'value1',
                 u'key2': u'value2',

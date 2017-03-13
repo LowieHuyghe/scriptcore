@@ -6,11 +6,11 @@ from scriptcore.console.option import Option
 from scriptcore.console.errors.unknowncommanderror import UnknownCommandError
 from scriptcore.console.errors.unknownoptionerror import UnknownOptionError
 import os.path
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
 import sys
+if sys.version_info < (3, 0):
+    from cStringIO import StringIO
+else:
+    from io import StringIO
 import types
 
 
