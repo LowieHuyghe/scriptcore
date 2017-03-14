@@ -34,12 +34,14 @@ class TestAttachment(TestCase):
             ts = row['ts']
             if not row['fields']:
                 fields = row['fields']
+                extra_field = None
             else:
                 fields = list(map(lambda field: Field(
                     field['title'],
                     field['value'],
                     short=field['short']
                 ), row['fields']))
+                extra_field = fields.pop()
 
             attachment = Attachment(
                 fallback,
@@ -57,6 +59,8 @@ class TestAttachment(TestCase):
                 footer_icon=footer_icon,
                 ts=ts
             )
+            if extra_field:
+                attachment.add_field(extra_field)
 
             self.assert_equal(fallback, attachment._fallback)
             self.assert_equal(color, attachment._color)

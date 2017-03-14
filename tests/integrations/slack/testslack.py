@@ -37,11 +37,12 @@ class TestSlack(TestCase):
         """
 
         data = {
+            'channel': 'test-feed',
             'username': 'Botty McBotFace',
-            'icon': ':sheep:',
+            'icon': 'http://sheep.png',
             'text': 'This is a test'
         }
-        slack = Slack(self._web_hook_url, username=data['username'], icon=data['icon'])
+        slack = Slack(self._web_hook_url, channel=data['channel'], username=data['username'], icon=data['icon'])
         message = Message(data['text'])
 
         self.assert_true(slack.send(message))
@@ -50,8 +51,9 @@ class TestSlack(TestCase):
         for response_data_raw in self._server.get_data():
             response_data = json.loads(response_data_raw)
 
+            self.assert_equal(data['channel'], response_data['channel'])
             self.assert_equal(data['username'], response_data['username'])
-            self.assert_equal(data['icon'], response_data['icon_emoji'])
+            self.assert_equal(data['icon'], response_data['icon_url'])
             self.assert_equal(data['text'], response_data['text'])
 
     def test_send_message(self):
@@ -61,6 +63,7 @@ class TestSlack(TestCase):
         """
 
         data = {
+            'channel': 'test-feed',
             'username': 'Botty McBotFace',
             'icon': ':sheep:',
             'text': 'This is a test',
@@ -68,7 +71,7 @@ class TestSlack(TestCase):
             'sub_text': 'This is a subtext',
             'color': 'danger'
         }
-        slack = Slack(self._web_hook_url, username=data['username'], icon=data['icon'])
+        slack = Slack(self._web_hook_url, channel=data['channel'], username=data['username'], icon=data['icon'])
 
         self.assert_true(slack.send_message(data['text'], sub_title=data['sub_title'], sub_text=data['sub_text'], color=data['color']))
 
@@ -76,6 +79,7 @@ class TestSlack(TestCase):
         for response_data_raw in self._server.get_data():
             response_data = json.loads(response_data_raw)
 
+            self.assert_equal(data['channel'], response_data['channel'])
             self.assert_equal(data['username'], response_data['username'])
             self.assert_equal(data['icon'], response_data['icon_emoji'])
             self.assert_equal(data['text'], response_data['text'])
