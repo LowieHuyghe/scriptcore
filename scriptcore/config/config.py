@@ -5,6 +5,7 @@ if sys.version_info < (3, 0):
 else:
     import configparser as ConfigParser
 import json
+import yaml
 from scriptcore.encoding.encoding import Encoding
 
 
@@ -106,3 +107,24 @@ class Config(object):
                 self._config[key] = json_content[key]
             else:
                 self._config[namespace.lower()][key] = json_content[key]
+
+    def load_from_yaml(self, filename, namespace=None):
+        """
+        Load config from yaml-file
+        :param filename:    The file name
+        :param namespace:   An optional namespace
+        :return:            void
+        """
+
+        with open(filename) as yaml_file:
+            yaml_content = Encoding.normalize(yaml.load(yaml_file))
+
+        if namespace is not None:
+            if namespace.lower() not in self._config:
+                self._config[namespace.lower()] = {}
+
+        for key in yaml_content:
+            if namespace is None:
+                self._config[key] = yaml_content[key]
+            else:
+                self._config[namespace.lower()][key] = yaml_content[key]
