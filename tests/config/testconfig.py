@@ -34,10 +34,14 @@ string1: string1
         # Make ini-file
         path = self.write_temp_file("""
 [section1]
-string1: string1
-int1: 1
-float1: 1.1
-boolean1: true
+string1:
+string2: string2
+int1: 0
+int2: 1
+float1: 0.0
+float2: 1.1
+boolean1: false
+boolean2: true
 
 [section2]
 string2: string2
@@ -53,28 +57,22 @@ boolean2: false
             namespace_prefix = '%s.' % namespace if namespace is not None else ''
 
             # Test section 1
-            self.assert_is_instance(config('%ssection1' % namespace_prefix), dict)
-            self.assert_equal(4, len(config('%ssection1' % namespace_prefix)))
-            self.assert_is_instance(config('%ssection1.string1' % namespace_prefix), str)
-            self.assert_equal('string1', config('%ssection1.string1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.int1' % namespace_prefix), int)
-            self.assert_equal(1, config('%ssection1.int1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.float1' % namespace_prefix), float)
-            self.assert_equal(1.1, config('%ssection1.float1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.boolean1' % namespace_prefix), bool)
-            self.assert_equal(True, config('%ssection1.boolean1' % namespace_prefix))
+            self.assert_equal_deep(8, len(config('%ssection1' % namespace_prefix)))
+            self.assert_equal_deep('', config('%ssection1.string1' % namespace_prefix))
+            self.assert_equal_deep('string2', config('%ssection1.string2' % namespace_prefix))
+            self.assert_equal_deep(0, config('%ssection1.int1' % namespace_prefix))
+            self.assert_equal_deep(1, config('%ssection1.int2' % namespace_prefix))
+            self.assert_equal_deep(0.0, config('%ssection1.float1' % namespace_prefix))
+            self.assert_equal_deep(1.1, config('%ssection1.float2' % namespace_prefix))
+            self.assert_equal_deep(False, config('%ssection1.boolean1' % namespace_prefix))
+            self.assert_equal_deep(True, config('%ssection1.boolean2' % namespace_prefix))
 
             # Test section 2
-            self.assert_is_instance(config('%ssection2' % namespace_prefix), dict)
-            self.assert_equal(4, len(config('%ssection2' % namespace_prefix)))
-            self.assert_is_instance(config('%ssection2.string2' % namespace_prefix), str)
-            self.assert_equal('string2', config('%ssection2.string2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.int2' % namespace_prefix), int)
-            self.assert_equal(2, config('%ssection2.int2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.float2' % namespace_prefix), float)
-            self.assert_equal(2.2, config('%ssection2.float2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.boolean2' % namespace_prefix), bool)
-            self.assert_equal(False, config('%ssection2.boolean2' % namespace_prefix))
+            self.assert_equal_deep(4, len(config('%ssection2' % namespace_prefix)))
+            self.assert_equal_deep('string2', config('%ssection2.string2' % namespace_prefix))
+            self.assert_equal_deep(2, config('%ssection2.int2' % namespace_prefix))
+            self.assert_equal_deep(2.2, config('%ssection2.float2' % namespace_prefix))
+            self.assert_equal_deep(False, config('%ssection2.boolean2' % namespace_prefix))
 
             # Test section 3
             self.assert_equal(None, config('%ssection3' % namespace_prefix))
@@ -89,10 +87,14 @@ boolean2: false
         path = self.write_temp_file("""
 {
     "section1": {
-        "string1": "string1",
-        "int1": 1,
-        "float1": 1.1,
-        "boolean1": true
+        "string1": "",
+        "string2": "string2",
+        "int1": 0,
+        "int2": 1,
+        "float1": 0.0,
+        "float2": 1.1,
+        "boolean1": false,
+        "boolean2": true
     },
     "section2": {
         "string2": "string2",
@@ -110,28 +112,22 @@ boolean2: false
             namespace_prefix = '%s.' % namespace if namespace is not None else ''
 
             # Test section 1
-            self.assert_is_instance(config('%ssection1' % namespace_prefix), dict)
-            self.assert_equal(4, len(config('%ssection1' % namespace_prefix)))
-            self.assert_is_instance(config('%ssection1.string1' % namespace_prefix), str)
-            self.assert_equal('string1', config('%ssection1.string1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.int1' % namespace_prefix), int)
-            self.assert_equal(1, config('%ssection1.int1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.float1' % namespace_prefix), float)
-            self.assert_equal(1.1, config('%ssection1.float1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.boolean1' % namespace_prefix), bool)
-            self.assert_equal(True, config('%ssection1.boolean1' % namespace_prefix))
+            self.assert_equal_deep(8, len(config('%ssection1' % namespace_prefix)))
+            self.assert_equal_deep('', config('%ssection1.string1' % namespace_prefix))
+            self.assert_equal_deep('string2', config('%ssection1.string2' % namespace_prefix))
+            self.assert_equal_deep(0, config('%ssection1.int1' % namespace_prefix))
+            self.assert_equal_deep(1, config('%ssection1.int2' % namespace_prefix))
+            self.assert_equal_deep(0.0, config('%ssection1.float1' % namespace_prefix))
+            self.assert_equal_deep(1.1, config('%ssection1.float2' % namespace_prefix))
+            self.assert_equal_deep(False, config('%ssection1.boolean1' % namespace_prefix))
+            self.assert_equal_deep(True, config('%ssection1.boolean2' % namespace_prefix))
 
             # Test section 2
-            self.assert_is_instance(config('%ssection2' % namespace_prefix), dict)
-            self.assert_equal(4, len(config('%ssection2' % namespace_prefix)))
-            self.assert_is_instance(config('%ssection2.string2' % namespace_prefix), str)
-            self.assert_equal('string2', config('%ssection2.string2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.int2' % namespace_prefix), int)
-            self.assert_equal(2, config('%ssection2.int2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.float2' % namespace_prefix), float)
-            self.assert_equal(2.2, config('%ssection2.float2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.boolean2' % namespace_prefix), bool)
-            self.assert_equal(False, config('%ssection2.boolean2' % namespace_prefix))
+            self.assert_equal_deep(4, len(config('%ssection2' % namespace_prefix)))
+            self.assert_equal_deep('string2', config('%ssection2.string2' % namespace_prefix))
+            self.assert_equal_deep(2, config('%ssection2.int2' % namespace_prefix))
+            self.assert_equal_deep(2.2, config('%ssection2.float2' % namespace_prefix))
+            self.assert_equal_deep(False, config('%ssection2.boolean2' % namespace_prefix))
 
             # Test section 3
             self.assert_equal(None, config('%ssection3' % namespace_prefix))
@@ -145,10 +141,14 @@ boolean2: false
         # Make yaml-file
         path = self.write_temp_file("""
 section1:
-    string1: string1
-    int1: 1
-    float1: 1.1
-    boolean1: true
+    string1:
+    string2: string2
+    int1: 0
+    int2: 1
+    float1: 0.0
+    float2: 1.1
+    boolean1: false
+    boolean2: true
     list1:
         - list1item1
         - list1item2
@@ -168,35 +168,24 @@ section2:
             namespace_prefix = '%s.' % namespace if namespace is not None else ''
 
             # Test section 1
-            self.assert_is_instance(config('%ssection1' % namespace_prefix), dict)
-            self.assert_equal(5, len(config('%ssection1' % namespace_prefix)))
-            self.assert_is_instance(config('%ssection1.string1' % namespace_prefix), str)
-            self.assert_equal('string1', config('%ssection1.string1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.int1' % namespace_prefix), int)
-            self.assert_equal(1, config('%ssection1.int1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.float1' % namespace_prefix), float)
-            self.assert_equal(1.1, config('%ssection1.float1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.boolean1' % namespace_prefix), bool)
-            self.assert_equal(True, config('%ssection1.boolean1' % namespace_prefix))
-            self.assert_is_instance(config('%ssection1.list1' % namespace_prefix), list)
-            self.assert_equal(2, len(config('%ssection1.list1' % namespace_prefix)))
-            self.assert_equal('list1item1', config('%ssection1.list1' % namespace_prefix)[0])
-            self.assert_equal('list1item2', config('%ssection1.list1' % namespace_prefix)[1])
+            self.assert_equal_deep(9, len(config('%ssection1' % namespace_prefix)))
+            self.assert_equal_deep(None, config('%ssection1.string1' % namespace_prefix))
+            self.assert_equal_deep('string2', config('%ssection1.string2' % namespace_prefix))
+            self.assert_equal_deep(0, config('%ssection1.int1' % namespace_prefix))
+            self.assert_equal_deep(1, config('%ssection1.int2' % namespace_prefix))
+            self.assert_equal_deep(0.0, config('%ssection1.float1' % namespace_prefix))
+            self.assert_equal_deep(1.1, config('%ssection1.float2' % namespace_prefix))
+            self.assert_equal_deep(False, config('%ssection1.boolean1' % namespace_prefix))
+            self.assert_equal_deep(True, config('%ssection1.boolean2' % namespace_prefix))
+            self.assert_equal_deep(['list1item1', 'list1item2'], config('%ssection1.list1' % namespace_prefix))
 
             # Test section 2
-            self.assert_is_instance(config('%ssection2' % namespace_prefix), dict)
-            self.assert_equal(5, len(config('%ssection2' % namespace_prefix)))
-            self.assert_is_instance(config('%ssection2.string2' % namespace_prefix), str)
-            self.assert_equal('string2', config('%ssection2.string2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.int2' % namespace_prefix), int)
-            self.assert_equal(2, config('%ssection2.int2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.float2' % namespace_prefix), float)
-            self.assert_equal(2.2, config('%ssection2.float2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.boolean2' % namespace_prefix), bool)
-            self.assert_equal(False, config('%ssection2.boolean2' % namespace_prefix))
-            self.assert_is_instance(config('%ssection2.list2' % namespace_prefix), list)
-            self.assert_equal(1, len(config('%ssection2.list2' % namespace_prefix)))
-            self.assert_equal('list2item1', config('%ssection2.list2' % namespace_prefix)[0])
+            self.assert_equal_deep(5, len(config('%ssection2' % namespace_prefix)))
+            self.assert_equal_deep('string2', config('%ssection2.string2' % namespace_prefix))
+            self.assert_equal_deep(2, config('%ssection2.int2' % namespace_prefix))
+            self.assert_equal_deep(2.2, config('%ssection2.float2' % namespace_prefix))
+            self.assert_equal_deep(False, config('%ssection2.boolean2' % namespace_prefix))
+            self.assert_equal_deep(['list2item1'], config('%ssection2.list2' % namespace_prefix))
 
             # Test section 3
             self.assert_equal(None, config('%ssection3' % namespace_prefix))
