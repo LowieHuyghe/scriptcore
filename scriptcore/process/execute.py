@@ -39,7 +39,7 @@ class Execute(object):
         :return:                Out, err, exitcode
         """
 
-        if isinstance(command_target, types.FunctionType):
+        if isinstance(command_target, types.FunctionType) or isinstance(command_target, types.MethodType):
             process = Thread(target=command_target, args=arguments)
             process.start()
         else:

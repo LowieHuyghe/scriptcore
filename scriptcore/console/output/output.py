@@ -1,4 +1,5 @@
 
+from scriptcore.encoding.encoding import Encoding
 import sys
 
 
@@ -75,6 +76,8 @@ class Output(object):
         :return:        void
         """
 
+        text = Encoding.normalize(text)
+
         print_text = '#  %s  #' % text
 
         self.default('%s\n%s\n%s' % (
@@ -91,6 +94,8 @@ class Output(object):
         :return:        void
         """
 
+        text = Encoding.normalize(text)
+
         self.default('# %s' % text, newline=newline)
 
     def success(self, text, newline=True):
@@ -100,6 +105,8 @@ class Output(object):
         :param newline: Newline at the end
         :return:        void
         """
+
+        text = Encoding.normalize(text)
 
         self.default('%s %s' % (self._emoticons['check'], self.color(text, 'green')), newline=newline)
 
@@ -111,6 +118,8 @@ class Output(object):
         :return:        void
         """
 
+        text = Encoding.normalize(text)
+
         self.default('%s %s' % (self._emoticons['bell'], self.color(text, 'yellow')), newline=newline)
 
     def error(self, text, newline=True):
@@ -120,6 +129,8 @@ class Output(object):
         :param newline: Newline at the end
         :return:        void
         """
+
+        text = Encoding.normalize(text)
 
         self.default('%s %s' % (self._emoticons['cross'], self.color(text, 'red')), newline=newline)
 
@@ -131,6 +142,8 @@ class Output(object):
         :return:        void
         """
 
+        text = Encoding.normalize(text)
+
         self.default('%s %s' % (self._emoticons['info'], text), newline=newline)
 
     def default(self, text, newline=True):
@@ -140,6 +153,8 @@ class Output(object):
         :param newline: Newline at the end
         :return:        void
         """
+
+        text = Encoding.normalize(text)
 
         # Calculate the text length
         text_length = text
@@ -170,5 +185,7 @@ class Output(object):
         :param color:   Color
         :return:        Converted text
         """
+
+        text = Encoding.normalize(text)
 
         return '%s%s%s' % (self._colors[color], text, self._colors['n'])
