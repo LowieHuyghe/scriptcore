@@ -212,7 +212,7 @@ class BaseScript(object):
 
         for command in self._commands.values():
             if command.given:
-                if isinstance(command.callback, types.FunctionType):
+                if isinstance(command.callback, types.FunctionType) or isinstance(command.callback, types.MethodType):
                     command.callback(arguments=command.arguments)
                 else:
                     subcommand = command.callback(self._base_path, arguments=command.arguments)
