@@ -2,21 +2,25 @@
 machine:
   post:
     - pyenv global 2.7.12 3.4.4 3.5.2 3.6.0
+    - virtualenv -p $( which python2.7 ) venv2.7
+    - virtualenv -p $( which python3.4 ) venv3.4
+    - virtualenv -p $( which python3.5 ) venv3.5
+    - virtualenv -p $( which python3.6 ) venv3.6
 
 dependencies:
   override:
-    - pip2.7 install -r requirements.txt
-    - pip3.4 install -r requirements.txt
-    - pip3.5 install -r requirements.txt
-    - pip3.6 install -r requirements.txt
-    - pip2.7 install coveralls
-    - pip3.4 install coveralls
-    - pip3.5 install coveralls
-    - pip3.6 install coveralls
+    - venv2.7/bin/pip install -r requirements.txt
+    - venv3.4/bin/pip install -r requirements.txt
+    - venv3.5/bin/pip install -r requirements.txt
+    - venv3.6/bin/pip install -r requirements.txt
+    - venv2.7/bin/pip install coveralls
+    - venv3.4/bin/pip install coveralls
+    - venv3.5/bin/pip install coveralls
+    - venv3.6/bin/pip install coveralls
 
 test:
   override:
-    - coverage-2.7 run --source=scriptcore setup.py test
-    - coverage-3.4 run --source=scriptcore setup.py test
-    - coverage-3.5 run --source=scriptcore setup.py test
-    - coverage-3.6 run --source=scriptcore setup.py test
+    - venv2.7/bin/coverage run --source=scriptcore setup.py test
+    - venv3.4/bin/coverage run --source=scriptcore setup.py test
+    - venv3.5/bin/coverage run --source=scriptcore setup.py test
+    - venv3.6/bin/coverage run --source=scriptcore setup.py test
