@@ -2,26 +2,26 @@
 machine:
   post:
     - pyenv global 2.7.12 3.4.4 3.5.2 3.6.0
+    - "[ ! -d ~/virtualenvs/venv-2.7 ] && virtualenv -p $( which python2.7 ) ~/virtualenvs/venv-2.7"
+    - "[ ! -d ~/virtualenvs/venv-3.4 ] && virtualenv -p $( which python3.4 ) ~/virtualenvs/venv-3.4"
+    - "[ ! -d ~/virtualenvs/venv-3.5 ] && virtualenv -p $( which python3.5 ) ~/virtualenvs/venv-3.5"
+    - "[ ! -d ~/virtualenvs/venv-3.6 ] && virtualenv -p $( which python3.6 ) ~/virtualenvs/venv-3.6"
 
 dependencies:
-  pre:
-    - virtualenv -p $( which python2.7 ) venv2.7
-    - virtualenv -p $( which python3.4 ) venv3.4
-    - virtualenv -p $( which python3.5 ) venv3.5
-    - virtualenv -p $( which python3.6 ) venv3.6
   override:
-    - venv2.7/bin/pip install -r requirements.txt
-    - venv3.4/bin/pip install -r requirements.txt
-    - venv3.5/bin/pip install -r requirements.txt
-    - venv3.6/bin/pip install -r requirements.txt
-    - venv2.7/bin/pip install coveralls
-    - venv3.4/bin/pip install coveralls
-    - venv3.5/bin/pip install coveralls
-    - venv3.6/bin/pip install coveralls
+    - ~/virtualenvs/venv-2.7/bin/pip install -r requirements.txt
+    - ~/virtualenvs/venv-3.4/bin/pip install -r requirements.txt
+    - ~/virtualenvs/venv-3.5/bin/pip install -r requirements.txt
+    - ~/virtualenvs/venv-3.6/bin/pip install -r requirements.txt
+
+    - ~/virtualenvs/venv-2.7/bin/pip install coveralls
+    - ~/virtualenvs/venv-3.4/bin/pip install coveralls
+    - ~/virtualenvs/venv-3.5/bin/pip install coveralls
+    - ~/virtualenvs/venv-3.6/bin/pip install coveralls
 
 test:
   override:
-    - venv2.7/bin/coverage run --source=scriptcore setup.py test
-    - venv3.4/bin/coverage run --source=scriptcore setup.py test
-    - venv3.5/bin/coverage run --source=scriptcore setup.py test
-    - venv3.6/bin/coverage run --source=scriptcore setup.py test
+    - ~/virtualenvs/venv-2.7/bin/coverage run --source=scriptcore setup.py test
+    - ~/virtualenvs/venv-3.4/bin/coverage run --source=scriptcore setup.py test
+    - ~/virtualenvs/venv-3.5/bin/coverage run --source=scriptcore setup.py test
+    - ~/virtualenvs/venv-3.6/bin/coverage run --source=scriptcore setup.py test
