@@ -3,6 +3,13 @@ machine:
   post:
     - pyenv global 2.7.12 3.4.4 3.5.2 3.6.0
 
+dependencies:
+  override:
+    - pip2.7 install -r requirements.txt
+    - pip3.4 install -r requirements.txt
+    - pip3.5 install -r requirements.txt
+    - pip3.6 install -r requirements.txt
+
 test:
   override:
     - python2.7 setup.py test
