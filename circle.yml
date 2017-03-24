@@ -9,10 +9,14 @@ dependencies:
     - pip3.4 install -r requirements.txt
     - pip3.5 install -r requirements.txt
     - pip3.6 install -r requirements.txt
+    - pip2.7 install coveralls
+    - pip3.4 install coveralls
+    - pip3.5 install coveralls
+    - pip3.6 install coveralls
 
 test:
   override:
-    - python2.7 setup.py test
-    - python3.4 setup.py test
-    - python3.5 setup.py test
-    - python3.6 setup.py test
+    - coverage-2.7 run --source=scriptcore setup.py test
+    - coverage-3.4 run --source=scriptcore setup.py test
+    - coverage-3.5 run --source=scriptcore setup.py test
+    - coverage-3.6 run --source=scriptcore setup.py test
