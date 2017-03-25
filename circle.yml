@@ -25,3 +25,9 @@ test:
 
   post:
     - codecov
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - ~/virtualenvs/venv-3.6/bin/python setup.py docs_publish
