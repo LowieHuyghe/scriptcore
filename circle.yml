@@ -19,9 +19,20 @@ dependencies:
     - ~/virtualenvs/venv-3.5/bin/pip install coveralls
     - ~/virtualenvs/venv-3.6/bin/pip install coveralls
 
+    - ~/virtualenvs/venv-2.7/bin/pip install codecov
+    - ~/virtualenvs/venv-3.4/bin/pip install codecov
+    - ~/virtualenvs/venv-3.5/bin/pip install codecov
+    - ~/virtualenvs/venv-3.6/bin/pip install codecov
+
 test:
   override:
     - ~/virtualenvs/venv-2.7/bin/coverage run --source=scriptcore setup.py test
     - ~/virtualenvs/venv-3.4/bin/coverage run --source=scriptcore setup.py test
     - ~/virtualenvs/venv-3.5/bin/coverage run --source=scriptcore setup.py test
     - ~/virtualenvs/venv-3.6/bin/coverage run --source=scriptcore setup.py test
+
+  post:
+    - ~/virtualenvs/venv-2.7/bin/codecov
+    - ~/virtualenvs/venv-3.4/bin/codecov
+    - ~/virtualenvs/venv-3.5/bin/codecov
+    - ~/virtualenvs/venv-3.6/bin/codecov
