@@ -14,15 +14,9 @@ dependencies:
     - ~/virtualenvs/venv-3.5/bin/pip install -r requirements.txt
     - ~/virtualenvs/venv-3.6/bin/pip install -r requirements.txt
 
-    - ~/virtualenvs/venv-2.7/bin/pip install coveralls
-    - ~/virtualenvs/venv-3.4/bin/pip install coveralls
-    - ~/virtualenvs/venv-3.5/bin/pip install coveralls
-    - ~/virtualenvs/venv-3.6/bin/pip install coveralls
-
-    - ~/virtualenvs/venv-2.7/bin/pip install codecov
-    - ~/virtualenvs/venv-3.4/bin/pip install codecov
-    - ~/virtualenvs/venv-3.5/bin/pip install codecov
-    - ~/virtualenvs/venv-3.6/bin/pip install codecov
+    - pip install codecov
+    - pip install codeclimate-test-reporter
+    - pip install coveralls
 
 test:
   override:
@@ -32,7 +26,6 @@ test:
     - ~/virtualenvs/venv-3.6/bin/coverage run --source=scriptcore setup.py test
 
   post:
-    - ~/virtualenvs/venv-2.7/bin/codecov
-    - ~/virtualenvs/venv-3.4/bin/codecov
-    - ~/virtualenvs/venv-3.5/bin/codecov
-    - ~/virtualenvs/venv-3.6/bin/codecov
+    - codecov
+    - codeclimate-test-reporter
+    - coveralls
