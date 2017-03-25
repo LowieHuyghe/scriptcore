@@ -15,8 +15,6 @@ dependencies:
     - ~/virtualenvs/venv-3.6/bin/pip install -r requirements.txt
 
     - pip install codecov
-    - pip install codeclimate-test-reporter
-    - pip install coveralls
 
 test:
   override:
@@ -27,5 +25,3 @@ test:
 
   post:
     - codecov
-    - codeclimate-test-reporter
-    - coveralls
