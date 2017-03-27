@@ -48,13 +48,14 @@ class Option(object):
         :return:    Formatted value
         """
 
-        try:
-            value = int(value)
-        except ValueError:
+        if value is not None:
             try:
-                value = float(value)
+                value = int(value)
             except ValueError:
-                pass
+                try:
+                    value = float(value)
+                except ValueError:
+                    pass
 
         return value
 
