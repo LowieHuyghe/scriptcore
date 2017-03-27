@@ -201,7 +201,7 @@ class BaseScript(object):
             e_tb = '\n'.join(traceback.format_tb(tb))
             del tb
 
-            self.output.error('Error: %s\n%s' % (e, e_tb))
+            self.output.error('%s: %s\n%s' % (e.__class__.__name__, e, e_tb))
             self.output('')
             exit(1)
 

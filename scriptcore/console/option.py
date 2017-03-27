@@ -31,16 +31,32 @@ class Option(object):
 
     @value.setter
     def value(self, value):
-        self._value = value
+        self._value = self._format(value)
         self.given = True
 
     def add_value(self, value):
         if self.type == Option.type_list:
-            self._value.append(value)
+            self._value.append(self._format(value))
         else:
-            self._value = value
+            self._value = self._format(value)
 
         self.given = True
+
+    def _format(self, value):
+        """
+        Format value
+        :return:    Formatted value
+        """
+
+        try:
+            value = int(value)
+        except ValueError:
+            try:
+                value = float(value)
+            except ValueError:
+                pass
+
+        return value
 
     def reset(self):
         """
