@@ -1,5 +1,5 @@
 
-# [DEPRECATED] Script Core
+# Script Core
 
 [![CircleCI](https://circleci.com/gh/LowieHuyghe/script-core.svg?style=svg)](https://circleci.com/gh/LowieHuyghe/script-core)
 [![Code Health](https://landscape.io/github/LowieHuyghe/script-core/master/landscape.svg?style=flat)](https://landscape.io/github/LowieHuyghe/script-core/master)
